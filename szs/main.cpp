@@ -5,40 +5,94 @@
 
 using namespace std;
 
-int be_cast_int(char* buffer, int position) {
-    int cast =
-    ((unsigned int)(unsigned char) buffer[position])   << 24 |
-    ((unsigned int)(unsigned char) buffer[position+1]) << 16 |
-    ((unsigned int)(unsigned char) buffer[position+2]) <<  8 |
-    ((unsigned int)(unsigned char) buffer[position+3]);
-
-    return cast;
-}
-
 int le_cast_int(char* buffer, int position) {
-    int cast = 
-    ((unsigned int)(unsigned char) buffer[position+3]) << 24 |
-    ((unsigned int)(unsigned char) buffer[position+2]) << 16 |
-    ((unsigned int)(unsigned char) buffer[position+1]) <<  8 |
-    ((unsigned int)(unsigned char) buffer[position]);
 
-    return cast;
+    union {
+        char arr[4];
+        int i;
+    } u;
+
+    u.arr[0] = buffer[position];
+    u.arr[1] = buffer[position+1];
+    u.arr[2] = buffer[position+2];
+    u.arr[3] = buffer[position+3];
+
+    return u.i;
+
 }
 
-short be_cast_short(char* buffer, int position) {
-    short cast = 
-    ((unsigned short)(unsigned char) buffer[position]) << 8 |
-    ((unsigned short)(unsigned char) buffer[position+1]);
+int be_cast_int(char* buffer, int position) {
 
-    return cast;
+    union {
+        char arr[4];
+        int i;
+    } u;
+
+    u.arr[0] = buffer[position+3];
+    u.arr[1] = buffer[position+2];
+    u.arr[2] = buffer[position+1];
+    u.arr[3] = buffer[position];
+
+    return u.i;
+
 }
 
 short le_cast_short(char* buffer, int position) {
-    short cast = 
-    ((unsigned short)(unsigned char) buffer[position+1]) << 8 |
-    ((unsigned short)(unsigned char) buffer[position]);
 
-    return cast;
+    union {
+        char arr[2];
+        short s;
+    } u;
+
+    u.arr[0] = buffer[position];
+    u.arr[1] = buffer[position+1];
+
+    return u.s;
+
+}
+
+short be_cast_short(char* buffer, int position) {
+
+    union {
+        char arr[2];
+        short s;
+    } u;
+
+    u.arr[0] = buffer[position+1];
+    u.arr[1] = buffer[position];
+
+    return u.s;
+
+}
+
+float le_cast_float(char* buffer, int position) {
+    
+    union {
+        char arr[4];
+        float f;
+    } u;
+
+    u.arr[0] = buffer[position];
+    u.arr[1] = buffer[position+1];
+    u.arr[2] = buffer[position+2];
+    u.arr[3] = buffer[position+3];
+
+    return u.f;
+}
+
+float be_cast_float(char* buffer, int position) {
+    
+    union {
+        char arr[4];
+        float f;
+    } u;
+
+    u.arr[0] = buffer[position+3];
+    u.arr[1] = buffer[position+2];
+    u.arr[2] = buffer[position+1];
+    u.arr[3] = buffer[position];
+
+    return u.f;
 }
 
 int decompress_szs(string file_path_in, string file_path_out) {

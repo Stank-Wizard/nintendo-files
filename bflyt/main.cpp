@@ -23,93 +23,108 @@
 
 using namespace std;
 
-float be_cast_float(char* buffer, int position) {
-    unsigned int cast = 
-    ((unsigned int)(unsigned char) buffer[position])   << 24 |
-    ((unsigned int)(unsigned char) buffer[position+1]) << 16 |
-    ((unsigned int)(unsigned char) buffer[position+2]) <<  8 |
-    ((unsigned int)(unsigned char) buffer[position+3]);
+int le_cast_int(char* buffer, int position) {
 
     union {
-        unsigned int i;
-        float f;
+        char arr[4];
+        int i;
     } u;
 
-    u.i = cast;
+    u.arr[0] = buffer[position];
+    u.arr[1] = buffer[position+1];
+    u.arr[2] = buffer[position+2];
+    u.arr[3] = buffer[position+3];
 
-    return u.f;
-}
+    return u.i;
 
-float le_cast_float(char* buffer, int position) {
-    unsigned int cast = 
-    ((unsigned int)(unsigned char) buffer[position+3]) << 24 |
-    ((unsigned int)(unsigned char) buffer[position+2]) << 16 |
-    ((unsigned int)(unsigned char) buffer[position+1]) <<  8 |
-    ((unsigned int)(unsigned char) buffer[position]);
-
-    union {
-        unsigned int i;
-        float f;
-    } u;
-
-    u.i = cast;
-
-    return u.f;
 }
 
 int be_cast_int(char* buffer, int position) {
-    int cast =
-    ((unsigned int)(unsigned char) buffer[position])   << 24 |
-    ((unsigned int)(unsigned char) buffer[position+1]) << 16 |
-    ((unsigned int)(unsigned char) buffer[position+2]) <<  8 |
-    ((unsigned int)(unsigned char) buffer[position+3]);
 
-    return cast;
-}
+    union {
+        char arr[4];
+        int i;
+    } u;
 
-int le_cast_int(char* buffer, int position) {
-    int cast = 
-    ((unsigned int)(unsigned char) buffer[position+3]) << 24 |
-    ((unsigned int)(unsigned char) buffer[position+2]) << 16 |
-    ((unsigned int)(unsigned char) buffer[position+1]) <<  8 |
-    ((unsigned int)(unsigned char) buffer[position]);
+    u.arr[0] = buffer[position+3];
+    u.arr[1] = buffer[position+2];
+    u.arr[2] = buffer[position+1];
+    u.arr[3] = buffer[position];
 
-    return cast;
-}
+    return u.i;
 
-short be_cast_short(char* buffer, int position) {
-    short cast = 
-    ((unsigned short)(unsigned char) buffer[position]) << 8 |
-    ((unsigned short)(unsigned char) buffer[position+1]);
-
-    return cast;
 }
 
 short le_cast_short(char* buffer, int position) {
-    short cast = 
-    ((unsigned short)(unsigned char) buffer[position+1]) << 8 |
-    ((unsigned short)(unsigned char) buffer[position]);
 
-    return cast;
+    union {
+        char arr[2];
+        short s;
+    } u;
+
+    u.arr[0] = buffer[position];
+    u.arr[1] = buffer[position+1];
+
+    return u.s;
+
+}
+
+short be_cast_short(char* buffer, int position) {
+
+    union {
+        char arr[2];
+        short s;
+    } u;
+
+    u.arr[0] = buffer[position+1];
+    u.arr[1] = buffer[position];
+
+    return u.s;
+
+}
+
+float le_cast_float(char* buffer, int position) {
+    
+    union {
+        char arr[4];
+        float f;
+    } u;
+
+    u.arr[0] = buffer[position];
+    u.arr[1] = buffer[position+1];
+    u.arr[2] = buffer[position+2];
+    u.arr[3] = buffer[position+3];
+
+    return u.f;
+}
+
+float be_cast_float(char* buffer, int position) {
+    
+    union {
+        char arr[4];
+        float f;
+    } u;
+
+    u.arr[0] = buffer[position+3];
+    u.arr[1] = buffer[position+2];
+    u.arr[2] = buffer[position+1];
+    u.arr[3] = buffer[position];
+
+    return u.f;
 }
 
 int handle_lyt1(char* buffer, int size) {
 
     bool is_drawn_from_middle = buffer[0x8];
 
-    // NEEDS TO BE FIXED
-    float layout_width = (float) le_cast_float(buffer, 0xC);
-    float layout_height = (float) le_cast_float(buffer, 0x10);
-    float maximum_parts_width = (float) le_cast_float(buffer, 0x14);
-    float maximum_parts_height = (float) le_cast_float(buffer, 0x18);
+    float layout_width = le_cast_float(buffer, 0xC);
+    float layout_height = le_cast_float(buffer, 0x10);
+    float maximum_parts_width = le_cast_float(buffer, 0x14);
+    float maximum_parts_height = le_cast_float(buffer, 0x18);
 
     string layout_name = "";
-
-    int i = 0x1C;
-
-    while(buffer[i] != '\0') {
+    for(char i=0x1C; buffer[i] != '\0'; i++) {
         layout_name += buffer[i];
-        i++;
     }
 
     cout << "\tIs Drawn from middle: " << is_drawn_from_middle << endl;
@@ -140,16 +155,65 @@ int handle_pan1(char* buffer, int size) {
         user_data += buffer[i];
     }
     
-    float x_position = (float) le_cast_float(buffer, 0x2C);
-    float y_position = (float) le_cast_float(buffer, 0x30);
-    float z_position = (float) le_cast_float(buffer, 0x34);
-    float x_rotation = (float) le_cast_float(buffer, 0x38);
-    float y_rotation = (float) le_cast_float(buffer, 0x3C);
-    float z_rotation = (float) le_cast_float(buffer, 0x40);
-    float x_scale = (float) le_cast_float(buffer, 0x44);
-    float y_scale = (float) le_cast_float(buffer, 0x48);
-    float pane_width = (float) le_cast_float(buffer, 0x4C);
-    float pane_height = (float) le_cast_float(buffer, 0x50);
+    float x_position = le_cast_float(buffer, 0x2C);
+    float y_position = le_cast_float(buffer, 0x30);
+    float z_position = le_cast_float(buffer, 0x34);
+    float x_rotation = le_cast_float(buffer, 0x38);
+    float y_rotation = le_cast_float(buffer, 0x3C);
+    float z_rotation = le_cast_float(buffer, 0x40);
+    float x_scale = le_cast_float(buffer, 0x44);
+    float y_scale = le_cast_float(buffer, 0x48);
+    float pane_width = le_cast_float(buffer, 0x4C);
+    float pane_height = le_cast_float(buffer, 0x50);
+
+    cout << "\tFlags: " << +flags << endl;
+    cout << "\tBitfield: " << hex << +bitfield << dec << endl;
+    cout << "\tAlpha value: " << hex << +alpha_value << dec << endl;
+    cout << "\tPart Scaling: " << hex << +part_scaling << dec << endl;
+    cout << "\tPane Name: " << pane_name << endl;
+    cout << "\tUser Data: " << hex << user_data << dec << endl;
+    cout << "\tX Position: " << x_position << endl;
+    cout << "\tY Position: " << y_position << endl;
+    cout << "\tZ Position: " << z_position << endl;
+    cout << "\tX Rotation: " << x_rotation << endl;
+    cout << "\tY Rotation: " << y_rotation << endl;
+    cout << "\tZ Rotation: " << z_rotation << endl;
+    cout << "\tX Scale: " << x_scale << endl;
+    cout << "\tY Scale: " << y_scale << endl;
+    cout << "\tPane Width: " << pane_width << endl;
+    cout << "\tPane Height: " << pane_height <<endl;
+    cout << endl;
+
+    return 0;
+}
+
+int handle_prt1(char* buffer, int size) {
+
+    unsigned char flags = buffer[0x8];
+    unsigned char bitfield = buffer[0x9];
+    unsigned char alpha_value = buffer[0xA];
+    unsigned char part_scaling = buffer[0xB];
+
+    string pane_name = "";
+    for(char i=0xC; buffer[i] != '\0'; i++) {
+        pane_name += buffer[i];
+    }
+
+    string user_data = "";
+    for(char i = 0x24; i < 0x2C; i++) {
+        user_data += buffer[i];
+    }
+    
+    float x_position = le_cast_float(buffer, 0x2C);
+    float y_position = le_cast_float(buffer, 0x30);
+    float z_position = le_cast_float(buffer, 0x34);
+    float x_rotation = le_cast_float(buffer, 0x38);
+    float y_rotation = le_cast_float(buffer, 0x3C);
+    float z_rotation = le_cast_float(buffer, 0x40);
+    float x_scale = le_cast_float(buffer, 0x44);
+    float y_scale = le_cast_float(buffer, 0x48);
+    float pane_width = le_cast_float(buffer, 0x4C);
+    float pane_height = le_cast_float(buffer, 0x50);
 
     cout << "\tFlags: " << +flags << endl;
     cout << "\tBitfield: " << hex << +bitfield << dec << endl;
@@ -224,6 +288,7 @@ int handle_section(char* section, int size) {
             break;
         case prt1:
             cout << "prt1 : Parts pane" << endl;
+            handle_prt1(section, size);
             break;
         case txt1:
             cout << "txt1 : Textbox pane" << endl;
