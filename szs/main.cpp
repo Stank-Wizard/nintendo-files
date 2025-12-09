@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <filesystem>
 
 #define szs 1499560496
 
@@ -112,8 +113,8 @@ int decompress_szs(string file_path_in, string file_path_out) {
     szs_data_size -= szs_header_size;
 
     // Allocate array in memory for file contents
-    char *szs_data = new char[szs_data_size];
     char *szs_header = new char[szs_header_size];
+    char *szs_data = new char[szs_data_size];
 
     // Go back to begining of file
     input_stream.seekg(0, ios::beg);
@@ -192,12 +193,19 @@ int decompress_szs(string file_path_in, string file_path_out) {
         valid_bits_left -= 1;
     }
 
+    // Bit of a hack to get folder paths
+    string folder_path_out = file_path_out.substr(0, file_path_out.rfind('/'));
+
+    // Create file path for file
+    filesystem::path nested_path = folder_path_out;
+    filesystem::create_directory(nested_path);
+
     // Open output file stream to file
     ofstream output_stream(file_path_out, ios::out | ios::binary);
 
     // If files tream isnt open
     if(!output_stream.is_open()) {
-        cerr << "[!] Error writing to file: " << file_path_in << endl;
+        cerr << "[!] Error writing to file: " << file_path_out << endl;
         return 1;
     }
 
