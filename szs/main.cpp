@@ -133,16 +133,26 @@ int decompress_szs(string file_path_in, string file_path_out) {
     // Magic number check
     if(szs_magic_number != szs) {
         cerr << "[!] Error not a szs encoded file! " << file_path_in << endl;
+
+        // Clean up variables
+        delete[] szs_header;
+        delete[] szs_data;
+
+        // Prevent dangling pointer
+        szs_header = nullptr;
+        szs_data = nullptr;
+
         return 1;
     }
+
+    // Create buffer for destination file
+    char *sarc_data = new char[sarc_data_size];
 
     // Create variables needed for decompression
     unsigned int valid_bits_left = 0;
     unsigned int sarc_data_pos = 0;
     unsigned int szs_data_pos = 0;
     unsigned char current_code_byte;
-
-    char *sarc_data = new char[sarc_data_size];
 
     // Start Decompressing the data
     while(sarc_data_pos < sarc_data_size) {
@@ -206,6 +216,17 @@ int decompress_szs(string file_path_in, string file_path_out) {
     // If files tream isnt open
     if(!output_stream.is_open()) {
         cerr << "[!] Error writing to file: " << file_path_out << endl;
+
+        // Clean up variables
+        delete[] szs_header;
+        delete[] szs_data;
+        delete[] sarc_data;
+
+        // Prevent dangling pointer
+        szs_header = nullptr;
+        szs_data = nullptr;
+        sarc_data = nullptr;
+
         return 1;
     }
 

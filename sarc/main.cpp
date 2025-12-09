@@ -163,6 +163,23 @@ int unpack_sarc(string file_path_in, string folder_path_out) {
     // Magic number check
     if(sarc_magic_number != sarc) {
         cerr << "[!] Error not a sarc archive file! " << file_path_in << endl;
+
+        // Clean up un needed variables
+        delete[] sarc_data;
+        delete[] sarc_header;
+        delete[] sfnt_entries;
+        delete[] sfnt_header;
+        delete[] sfat_entries;
+        delete[] sfat_header;
+
+        // Prevent dangling pointer
+        sarc_data = nullptr;
+        sarc_header = nullptr;
+        sfnt_entries = nullptr;
+        sfnt_header = nullptr;
+        sfat_entries = nullptr;
+        sfat_header = nullptr;
+        
         return 1;
     }
 
@@ -172,6 +189,23 @@ int unpack_sarc(string file_path_in, string folder_path_out) {
     // Magic number check
     if(sfat_magic_number != sfat) {
         cerr << "[!] Error doesnt contain SFAT section! " << file_path_in << endl;
+
+        // Clean up un needed variables
+        delete[] sarc_data;
+        delete[] sarc_header;
+        delete[] sfnt_entries;
+        delete[] sfnt_header;
+        delete[] sfat_entries;
+        delete[] sfat_header;
+
+        // Prevent dangling pointer
+        sarc_data = nullptr;
+        sarc_header = nullptr;
+        sfnt_entries = nullptr;
+        sfnt_header = nullptr;
+        sfat_entries = nullptr;
+        sfat_header = nullptr;
+
         return 1;
     }
 
@@ -181,6 +215,23 @@ int unpack_sarc(string file_path_in, string folder_path_out) {
     // Magic number check
     if(sfnt_magic_number != sfnt) {
         cerr << "[!] Error doesnt contain SFNT section! " << file_path_in << endl;
+
+        // Clean up un needed variables
+        delete[] sarc_data;
+        delete[] sarc_header;
+        delete[] sfnt_entries;
+        delete[] sfnt_header;
+        delete[] sfat_entries;
+        delete[] sfat_header;
+
+        // Prevent dangling pointer
+        sarc_data = nullptr;
+        sarc_header = nullptr;
+        sfnt_entries = nullptr;
+        sfnt_header = nullptr;
+        sfat_entries = nullptr;
+        sfat_header = nullptr;
+
         return 1;
     }
 
