@@ -4,3 +4,4 @@ build:
 
 clean:
 	rm a.out
+	rm systemDataUnpacked -rd

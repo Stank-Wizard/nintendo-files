@@ -1,6 +1,5 @@
 build:
 	g++ main.cpp
-	mkdir -p systemDataDecompressed
 	./a.out
 
 clean:
