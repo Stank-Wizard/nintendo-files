@@ -1,8 +1,9 @@
 #include <iostream>
 #include <fstream>
+#include <iomanip>
+#include "../utils/utils.h"
 
 #define bflyt 1179408724
-
 #define lyt1 1819898929
 #define cnt1 1668183089
 #define usd1 1970496561
@@ -21,97 +22,8 @@
 #define txt1 1954051121
 #define wnd1 2003723313
 
+
 using namespace std;
-
-int le_cast_int(char* buffer, int position) {
-
-    union {
-        char arr[4];
-        int i;
-    } u;
-
-    u.arr[0] = buffer[position];
-    u.arr[1] = buffer[position+1];
-    u.arr[2] = buffer[position+2];
-    u.arr[3] = buffer[position+3];
-
-    return u.i;
-
-}
-
-int be_cast_int(char* buffer, int position) {
-
-    union {
-        char arr[4];
-        int i;
-    } u;
-
-    u.arr[0] = buffer[position+3];
-    u.arr[1] = buffer[position+2];
-    u.arr[2] = buffer[position+1];
-    u.arr[3] = buffer[position];
-
-    return u.i;
-
-}
-
-short le_cast_short(char* buffer, int position) {
-
-    union {
-        char arr[2];
-        short s;
-    } u;
-
-    u.arr[0] = buffer[position];
-    u.arr[1] = buffer[position+1];
-
-    return u.s;
-
-}
-
-short be_cast_short(char* buffer, int position) {
-
-    union {
-        char arr[2];
-        short s;
-    } u;
-
-    u.arr[0] = buffer[position+1];
-    u.arr[1] = buffer[position];
-
-    return u.s;
-
-}
-
-float le_cast_float(char* buffer, int position) {
-    
-    union {
-        char arr[4];
-        float f;
-    } u;
-
-    u.arr[0] = buffer[position];
-    u.arr[1] = buffer[position+1];
-    u.arr[2] = buffer[position+2];
-    u.arr[3] = buffer[position+3];
-
-    return u.f;
-}
-
-float be_cast_float(char* buffer, int position) {
-    
-    union {
-        char arr[4];
-        float f;
-    } u;
-
-    u.arr[0] = buffer[position+3];
-    u.arr[1] = buffer[position+2];
-    u.arr[2] = buffer[position+1];
-    u.arr[3] = buffer[position];
-
-    return u.f;
-}
 
 int handle_lyt1(char* buffer, int size) {
 
@@ -130,8 +42,8 @@ int handle_lyt1(char* buffer, int size) {
     cout << "\tIs Drawn from middle: " << is_drawn_from_middle << endl;
     cout << "\tLayout Width: " << layout_width << endl;
     cout << "\tLayout Height: " << layout_height << endl;
+    cout << "\tMaximum Parts Width: " << maximum_parts_width << endl;
     cout << "\tMaximum Parts Height: " << maximum_parts_height << endl;
-    cout << "\tMaximum Parts Weigth: " << maximum_parts_width << endl;
     cout << "\tLayout name: " << layout_name << endl;
     cout << endl;
 
@@ -236,6 +148,28 @@ int handle_prt1(char* buffer, int size) {
     return 0;
 }
 
+int handle_mat1(char* buffer, int size) {
+    // NOT WORKING AS INTENDED
+
+    unsigned int top_left_color = le_cast_int(buffer, 0x0);
+    unsigned int top_right_color = le_cast_int(buffer, 0x4);
+    unsigned int bottom_left_color = le_cast_int(buffer, 0x8);
+    unsigned int bottom_right_color = le_cast_int(buffer, 0xC);
+
+    short index = le_cast_short(buffer, 0x10);
+    short coord_sets_count = le_cast_short(buffer, 0x12);
+
+    cout << "\tTop Left Color: 0x" << hex << setw(8)<< setfill('0') << top_left_color << dec << endl;
+    cout << "\tTop Right Color: 0x" << hex << setw(8)<< setfill('0') << top_right_color << dec << endl;
+    cout << "\tBottom Left Color: 0x" << hex << setw(8)<< setfill('0') << bottom_left_color << dec << endl;
+    cout << "\tBottom Right Color: 0x" << hex << setw(8)<< setfill('0') << bottom_right_color << dec << endl;
+    cout << "\tIndex: 0x" << hex << index << dec << endl;
+    cout << "\tCoordinates sets count: " << coord_sets_count << endl;
+    cout << endl;
+
+    return 0;
+}
+
 int handle_section(char* section, int size) {
 
     // Get section identifier
@@ -260,6 +194,7 @@ int handle_section(char* section, int size) {
             break;
         case mat1:
             cout << "mat1 : Material" << endl;
+            handle_mat1(section, size);
             break;
         case grp1:
             cout << "grp1 : Group info" << endl;
@@ -351,6 +286,13 @@ int read_bflyt(string file_path_in) {
     // Magic number check
     if(bflyt_magic_number != bflyt) {
         cerr << "[!] Error not a bflyt file! " << file_path_in << endl;
+
+        delete[] bflyt_data;
+        delete[] bflyt_header;
+
+        bflyt_data = nullptr;
+        bflyt_header = nullptr;
+
         return 1;
     }
 
@@ -411,7 +353,8 @@ int main() {
     read_bflyt("systemDataUnpacked/ResidentMenu/blyt/RdtBase.bflyt");
     */
 
-	read_bflyt("systemDataUnpacked/ResidentMenu/blyt/RdtBase.bflyt");
+	read_bflyt("systemDataUnpacked/Eula/blyt/Cursor3.bflyt");
+	read_bflyt("systemDataUnpacked/Eula/blyt/Waiticon.bflyt");
 
 	return 0;
 }
