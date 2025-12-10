@@ -275,6 +275,25 @@ int unpack_sarc(string file_path_in, string folder_path_out) {
         // If stream isnt open
         if(!output_stream.is_open()) {
             cerr << "[!] Error opening file: " << folder_path_out + file_name << endl;
+
+            // Clean up un needed variables
+            delete[] sarc_data;
+            delete[] sarc_header;
+            delete[] sfnt_entries;
+            delete[] sfnt_header;
+            delete[] sfat_entries;
+            delete[] sfat_header;
+            delete[] file;
+
+            // Prevent dangling pointer
+            sarc_data = nullptr;
+            sarc_header = nullptr;
+            sfnt_entries = nullptr;
+            sfnt_header = nullptr;
+            sfat_entries = nullptr;
+            sfat_header = nullptr;
+            file = nullptr;
+
             return 1;
         }
 
@@ -291,10 +310,20 @@ int unpack_sarc(string file_path_in, string folder_path_out) {
     }
 
     // Clean up un needed variables
-    delete[] sarc_data, sarc_header, sfnt_entries, sfnt_header, sfat_entries, sfat_header;
+    delete[] sarc_data;
+    delete[] sarc_header;
+    delete[] sfnt_entries;
+    delete[] sfnt_header;
+    delete[] sfat_entries;
+    delete[] sfat_header;
 
     // Prevent dangling pointer
-    sarc_data, sarc_header, sfnt_entries, sfnt_header, sfat_entries, sfat_header = nullptr;
+    sarc_data = nullptr;
+    sarc_header = nullptr;
+    sfnt_entries = nullptr;
+    sfnt_header = nullptr;
+    sfat_entries = nullptr;
+    sfat_header = nullptr;
 
     cout << file_path_in << " -> " << folder_path_out << endl;
 
