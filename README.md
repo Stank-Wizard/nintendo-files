@@ -50,6 +50,22 @@ cp [path-to-your-systemDataUnpacked-files] .
 make
 ```
 
+## View bntx
+
+```
+# clone repo
+git clone https://github.com/Stank-Wizard/nintendo-files.git
+
+# enter directory
+cd nintendo-files/bntx
+
+# copy needed files
+cp [path-to-your-systemDataUnpacked-files] .
+
+# finally run the program
+make
+```
+
 ## License
 
 This software is licensed under the terms of the GPLv3, with exemptions for specific projects noted below.
@@ -62,3 +78,4 @@ this repo is currently being developed and maintained by me but i'd like to give
 
 * __thakis__ for the [szs file format decompression documentation](http://www.amnoid.de/gc/yaz0.txt)
 * __kinnay__ for the [sarc and bflyt file format documentation](https://nintendo-formats.com/)
+* __zeldamods wiki team__ for the [bntx file documentation](https://epd.zeldamods.org/wiki/Bntx)
