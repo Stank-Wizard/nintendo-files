@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <filesystem>
-#include "../utils/utils.h"
+#include "../utils/utils.hpp"
 
 #define szs 1499560496
 
