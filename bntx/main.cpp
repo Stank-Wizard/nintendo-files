@@ -81,15 +81,33 @@ int read_bntx(string file_path_in) {
         return 1;
     }
 
+    int reserved = le_cast_int(bntx_header, 0x4);
+    int unknown_one = le_cast_int(bntx_header, 0x8);
+    short byte_order_mark = le_cast_short(bntx_header, 0xC);
+    short unknown_two = le_cast_short(bntx_header, 0x10);
+    int unknown_three = le_cast_int(bntx_header, 0x12);
+    int unknown_four = le_cast_int(bntx_header, 0x16);
+    int unknown_five = le_cast_int(bntx_header, 0x1A);
+    int unknown_six = le_cast_int(bntx_header, 0x1D);
+
+    cout << "BNTX : Unknown : 0x" << hex << reserved << endl;
+    cout << "BNTX : Unknown : 0x" << hex << unknown_one << endl;
+    cout << "BNTX : BOM : 0x" << hex << byte_order_mark<< endl;
+    cout << "BNTX : Unknown : 0x" << hex << unknown_two << endl;
+    cout << "BNTX : Unknown : 0x" << hex << unknown_three << endl;
+    cout << "BNTX : Unknown : 0x" << hex << unknown_four<< endl;
+    cout << "BNTX : Unknown : 0x" << hex << unknown_five<< endl;
+    cout << "BNTX : Unknown : 0x" << hex << unknown_six<< endl;
+
     int texture_count = le_cast_int(nx_header, 0x4);
     long texture_info_array = le_cast_long(nx_header, 0x8);
     long texture_data_region = le_cast_long(nx_header, 0x10);
     long texture_info_dictionary = le_cast_long(nx_header, 0x18);
 
-    cout << "Texture count in file: " << texture_count << endl;
-    cout << "Texture info array: 0x" << hex << texture_info_array << dec << endl;
-    cout << "Texture data region: 0x" << hex << texture_data_region << dec << endl;
-    cout << "Texture info dic: 0x" << hex << texture_info_dictionary << dec << endl;
+    cout << "NX : Texture count in file: " << texture_count << endl;
+    cout << "NX : Texture info array: 0x" << hex << texture_info_array << dec << endl;
+    cout << "NX : Texture data region: 0x" << hex << texture_data_region << dec << endl;
+    cout << "NX : Texture info dic: 0x" << hex << texture_info_dictionary << dec << endl;
     cout << endl;
 
     delete[] bntx_data;
@@ -123,6 +141,7 @@ int main() {
     */
 
     read_bntx("systemDataUnpacked/Eula/timg/__Combined.bntx");
+    read_bntx("systemDataUnpacked/ResidentMenu/timg/__Combined.bntx");
 
     return 0;
 }
