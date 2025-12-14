@@ -22,7 +22,6 @@
 #define txt1 1954051121
 #define wnd1 2003723313
 
-
 using namespace std;
 
 int handle_lyt1(char* buffer, int size) {

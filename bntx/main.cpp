@@ -85,13 +85,10 @@ int read_bntx(string file_path_in) {
     short byte_order_mark = le_cast_short(bntx_header, 0xC);
     short alignment_exponent = le_cast_short(bntx_header, 0xE);
     int file_name_offset = le_cast_int(bntx_header, 0x10);
-
     short is_relocated = le_cast_short(bntx_header, 0x14);
     short str_table_offset = le_cast_short(bntx_header, 0x16);
-
     int relocation_table_offset = le_cast_int(bntx_header, 0x18);
     int file_size = le_cast_int(bntx_header, 0x1C);
-
 
     cout << "BNTX : Version : 0x" << hex << version << endl;
     cout << "BNTX : BOM : 0x" << hex << byte_order_mark << endl;
@@ -99,18 +96,18 @@ int read_bntx(string file_path_in) {
     cout << "BNTX : File name offset : 0x" << hex << file_name_offset << endl;
     cout << "BNTX : Is relocated : 0x" << dec << is_relocated << endl;
     cout << "BNTX : Binary Block Header : 0x" << hex << str_table_offset << endl;
-    cout << "BNTX : Relocation Table offset : 0x" << hex << relocation_table_offset << endl;
+    cout << "BNTX : _RLT Table offset : 0x" << hex << relocation_table_offset << endl;
     cout << "BNTX : File size : " << dec << file_size << endl;
 
     int number_of_files = le_cast_int(nx_header, 0x4);
-    long texture_table_offset = le_cast_long(nx_header, 0x8);
-    long texture_data_region = le_cast_long(nx_header, 0x10);
-    long texture_info_dictionary = le_cast_long(nx_header, 0x18);
+    long brti_address_table_offset = le_cast_long(nx_header, 0x8);
+    long brtd_table_offset = le_cast_long(nx_header, 0x10);
+    long dic_table_offset = le_cast_long(nx_header, 0x18);
 
     cout << "NX : Number of files: " << number_of_files << endl;
-    cout << "NX : BRTI Address table offset: 0x" << hex << texture_table_offset << dec << endl;
-    cout << "NX : BRTD Table offset: 0x" << hex << texture_data_region << dec << endl;
-    cout << "NX : _DIC Table offset: 0x" << hex << texture_info_dictionary << dec << endl;
+    cout << "NX : BRTI Address table offset: 0x" << hex << brti_address_table_offset << dec << endl;
+    cout << "NX : BRTD Table offset: 0x" << hex << brtd_table_offset << dec << endl;
+    cout << "NX : _DIC Table offset: 0x" << hex << dic_table_offset << dec << endl;
     cout << endl;
 
     delete[] bntx_data;
@@ -144,7 +141,6 @@ int main() {
     */
 
     read_bntx("systemDataUnpacked/Eula/timg/__Combined.bntx");
-    read_bntx("systemDataUnpacked/ResidentMenu/timg/__Combined.bntx");
 
     return 0;
 }
