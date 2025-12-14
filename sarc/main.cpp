@@ -243,20 +243,20 @@ int unpack_sarc(string file_path_in, string folder_path_out) {
 
 int main() {
 
-    unpack_sarc("systemDataDecompressed/common.sarc","systemDataUnpacked/common/");
-    unpack_sarc("systemDataDecompressed/Entrance.sarc","systemDataUnpacked/Entrance/");
-    unpack_sarc("systemDataDecompressed/Eula.sarc","systemDataUnpacked/Eula/");
-    unpack_sarc("systemDataDecompressed/Flaunch.sarc","systemDataUnpacked/Flaunch/");
-    unpack_sarc("systemDataDecompressed/Gift.sarc","systemDataUnpacked/Gift/");
-    unpack_sarc("systemDataDecompressed/Interrupt.sarc","systemDataUnpacked/Interrupt/");
-    unpack_sarc("systemDataDecompressed/Migration.sarc","systemDataUnpacked/Migration/");
-    unpack_sarc("systemDataDecompressed/MyPage.sarc","systemDataUnpacked/MyPage/");
-    unpack_sarc("systemDataDecompressed/Notification.sarc","systemDataUnpacked/Notification/");
-    unpack_sarc("systemDataDecompressed/Option.sarc","systemDataUnpacked/Option/");
-    unpack_sarc("systemDataDecompressed/Psl.sarc","systemDataUnpacked/Psl/");
-    unpack_sarc("systemDataDecompressed/ResidentMenu.sarc","systemDataUnpacked/ResidentMenu/");
-    unpack_sarc("systemDataDecompressed/SaveMove.sarc","systemDataUnpacked/SaveMove/");
-    unpack_sarc("systemDataDecompressed/Set.sarc","systemDataUnpacked/Set/");
+    unpack_sarc("systemDataDecompressed/common.arc","systemDataUnpacked/common/");
+    unpack_sarc("systemDataDecompressed/Entrance.arc","systemDataUnpacked/Entrance/");
+    unpack_sarc("systemDataDecompressed/Eula.arc","systemDataUnpacked/Eula/");
+    unpack_sarc("systemDataDecompressed/Flaunch.arc","systemDataUnpacked/Flaunch/");
+    unpack_sarc("systemDataDecompressed/Gift.arc","systemDataUnpacked/Gift/");
+    unpack_sarc("systemDataDecompressed/Interrupt.arc","systemDataUnpacked/Interrupt/");
+    unpack_sarc("systemDataDecompressed/Migration.arc","systemDataUnpacked/Migration/");
+    unpack_sarc("systemDataDecompressed/MyPage.arc","systemDataUnpacked/MyPage/");
+    unpack_sarc("systemDataDecompressed/Notification.arc","systemDataUnpacked/Notification/");
+    unpack_sarc("systemDataDecompressed/Option.arc","systemDataUnpacked/Option/");
+    unpack_sarc("systemDataDecompressed/Psl.arc","systemDataUnpacked/Psl/");
+    unpack_sarc("systemDataDecompressed/ResidentMenu.arc","systemDataUnpacked/ResidentMenu/");
+    unpack_sarc("systemDataDecompressed/SaveMove.arc","systemDataUnpacked/SaveMove/");
+    unpack_sarc("systemDataDecompressed/Set.arc","systemDataUnpacked/Set/");
 
     return 0;
 }

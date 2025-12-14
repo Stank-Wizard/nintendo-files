@@ -162,20 +162,20 @@ int decompress_szs(string file_path_in, string file_path_out) {
 
 int main() {
 
-    decompress_szs("systemData/common.szs","systemDataDecompressed/common.sarc");
-    decompress_szs("systemData/Entrance.szs","systemDataDecompressed/Entrance.sarc");
-    decompress_szs("systemData/Eula.szs","systemDataDecompressed/Eula.sarc");
-    decompress_szs("systemData/Flaunch.szs","systemDataDecompressed/Flaunch.sarc");
-    decompress_szs("systemData/Gift.szs","systemDataDecompressed/Gift.sarc");
-    decompress_szs("systemData/Interrupt.szs","systemDataDecompressed/Interrupt.sarc");
-    decompress_szs("systemData/Migration.szs","systemDataDecompressed/Migration.sarc");
-    decompress_szs("systemData/MyPage.szs","systemDataDecompressed/MyPage.sarc");
-    decompress_szs("systemData/Notification.szs","systemDataDecompressed/Notification.sarc");
-    decompress_szs("systemData/Option.szs","systemDataDecompressed/Option.sarc");
-    decompress_szs("systemData/Psl.szs","systemDataDecompressed/Psl.sarc");
-    decompress_szs("systemData/ResidentMenu.szs","systemDataDecompressed/ResidentMenu.sarc");
-    decompress_szs("systemData/SaveMove.szs","systemDataDecompressed/SaveMove.sarc");
-    decompress_szs("systemData/Set.szs","systemDataDecompressed/Set.sarc");
+    decompress_szs("systemData/common.szs","systemDataDecompressed/common.arc");
+    decompress_szs("systemData/Entrance.szs","systemDataDecompressed/Entrance.arc");
+    decompress_szs("systemData/Eula.szs","systemDataDecompressed/Eula.arc");
+    decompress_szs("systemData/Flaunch.szs","systemDataDecompressed/Flaunch.arc");
+    decompress_szs("systemData/Gift.szs","systemDataDecompressed/Gift.arc");
+    decompress_szs("systemData/Interrupt.szs","systemDataDecompressed/Interrupt.arc");
+    decompress_szs("systemData/Migration.szs","systemDataDecompressed/Migration.arc");
+    decompress_szs("systemData/MyPage.szs","systemDataDecompressed/MyPage.arc");
+    decompress_szs("systemData/Notification.szs","systemDataDecompressed/Notification.arc");
+    decompress_szs("systemData/Option.szs","systemDataDecompressed/Option.arc");
+    decompress_szs("systemData/Psl.szs","systemDataDecompressed/Psl.arc");
+    decompress_szs("systemData/ResidentMenu.szs","systemDataDecompressed/ResidentMenu.arc");
+    decompress_szs("systemData/SaveMove.szs","systemDataDecompressed/SaveMove.arc");
+    decompress_szs("systemData/Set.szs","systemDataDecompressed/Set.arc");
 
     return 0;
 }
