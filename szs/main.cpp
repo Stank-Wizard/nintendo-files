@@ -3,7 +3,7 @@
 #include <filesystem>
 #include "../utils/utils.hpp"
 
-#define szs 1499560496
+#define SZS 1499560496
 
 using namespace std;
 
@@ -19,44 +19,31 @@ int decompress_szs(string file_path_in, string file_path_out) {
     }
 
     // Get file size and allocate memory for contents
-    unsigned int szs_header_size = 16; 
     unsigned int szs_data_size =  input_stream.tellg();
-    szs_data_size -= szs_header_size;
-
-    // Allocate array in memory for file contents
-    char *szs_header = new char[szs_header_size];
     char *szs_data = new char[szs_data_size];
 
-    // Go back to begining of file
+    // Go back to begining of file and transfer contents to memory
     input_stream.seekg(0, ios::beg);
-
-    // Read contents of file header and contents into memory
-    input_stream.read(szs_header, szs_header_size);
     input_stream.read(szs_data, szs_data_size);
-
-    // Close file stream
     input_stream.close();
 
-    // Interpret header data
-    unsigned int szs_magic_number = be_cast_int(szs_header, 0x0);
-    unsigned int sarc_data_size = be_cast_int(szs_header, 0x4);
+    unsigned int szs_header_offset = 0x0;
+    unsigned int szs_header_size = 0x10;
+    unsigned int szs_data_offset = szs_header_offset + szs_header_size;
+    unsigned int szs_magic_number = be_cast_int(szs_data, szs_header_offset);
 
     // Magic number check
-    if(szs_magic_number != szs) {
+    if(szs_magic_number != SZS) {
         cerr << "[!] Error not a szs encoded file! " << file_path_in << endl;
 
-        // Clean up variables
-        delete[] szs_header;
         delete[] szs_data;
-
-        // Prevent dangling pointer
-        szs_header = nullptr;
         szs_data = nullptr;
 
         return 1;
     }
 
     // Create buffer for destination file
+    unsigned int sarc_data_size = be_cast_int(szs_data, szs_header_offset + 0x4);
     char *sarc_data = new char[sarc_data_size];
 
     // Create variables needed for decompression
@@ -70,22 +57,22 @@ int decompress_szs(string file_path_in, string file_path_out) {
 
         // If there are no more valid bits, read next byte in uncompressed data and update valid bits
         if(valid_bits_left == 0) {
-            current_code_byte = szs_data[szs_data_pos];
+            current_code_byte = szs_data[szs_data_offset + szs_data_pos];
             ++szs_data_pos;
             valid_bits_left = 8;
         }
 
         // If current code byte has a data copy bit set to one, copy data from source to destination
         if((current_code_byte & 0x80) != 0) {
-            sarc_data[sarc_data_pos] = szs_data[szs_data_pos];
+            sarc_data[sarc_data_pos] = szs_data[szs_data_offset + szs_data_pos];
             sarc_data_pos++;
             szs_data_pos++;
         }
 
         // Run Length Encoding Part
         else {
-            unsigned int pair_part_one = (unsigned int)(unsigned char) szs_data[szs_data_pos];
-            unsigned int pair_part_two = (unsigned int)(unsigned char) szs_data[szs_data_pos + 1];
+            unsigned int pair_part_one = (unsigned int)(unsigned char) szs_data[szs_data_offset + szs_data_pos];
+            unsigned int pair_part_two = (unsigned int)(unsigned char) szs_data[szs_data_offset + szs_data_pos + 1];
             szs_data_pos += 2;
 
             unsigned int distance = ((pair_part_one & 0xF) << 8) | pair_part_two;
@@ -94,7 +81,7 @@ int decompress_szs(string file_path_in, string file_path_out) {
 
             // If number of bytes is zero, read next byte and add 0x12 to fix count
             if(number_of_bytes == 0) {
-                number_of_bytes = (unsigned int)(unsigned char) szs_data[szs_data_pos];
+                number_of_bytes = (unsigned int)(unsigned char) szs_data[szs_data_offset + szs_data_pos];
                 number_of_bytes += 0x12;
                 szs_data_pos++;
             } else {
@@ -129,12 +116,8 @@ int decompress_szs(string file_path_in, string file_path_out) {
         cerr << "[!] Error writing to file: " << file_path_out << endl;
 
         // Clean up variables
-        delete[] szs_header;
         delete[] szs_data;
         delete[] sarc_data;
-
-        // Prevent dangling pointer
-        szs_header = nullptr;
         szs_data = nullptr;
         sarc_data = nullptr;
 
@@ -146,12 +129,8 @@ int decompress_szs(string file_path_in, string file_path_out) {
     output_stream.close();
 
     // Clean up variables
-    delete[] szs_header;
     delete[] szs_data;
     delete[] sarc_data;
-
-    // Prevent dangling pointer
-    szs_header = nullptr;
     szs_data = nullptr;
     sarc_data = nullptr;
 
