@@ -24,18 +24,18 @@
 
 using namespace std;
 
-int handle_lyt1(char* buffer, int size) {
+int handle_lyt1(char* buffer, int offset) {
 
-    bool is_drawn_from_middle = buffer[0x8];
+    bool is_drawn_from_middle = buffer[offset + 0x8];
 
-    float layout_width = le_cast_float(buffer, 0xC);
-    float layout_height = le_cast_float(buffer, 0x10);
-    float maximum_parts_width = le_cast_float(buffer, 0x14);
-    float maximum_parts_height = le_cast_float(buffer, 0x18);
+    float layout_width = le_cast_float(buffer, offset + 0xC);
+    float layout_height = le_cast_float(buffer, offset + 0x10);
+    float maximum_parts_width = le_cast_float(buffer, offset + 0x14);
+    float maximum_parts_height = le_cast_float(buffer, offset + 0x18);
 
     string layout_name = "";
-    for(char i=0x1C; buffer[i] != '\0'; i++) {
-        layout_name += buffer[i];
+    for(char i=0x1C; buffer[offset + i] != '\0'; i++) {
+        layout_name += buffer[offset + i];
     }
 
     cout << "\tIs Drawn from middle: " << is_drawn_from_middle << endl;
@@ -49,33 +49,33 @@ int handle_lyt1(char* buffer, int size) {
     return 0;
 }
 
-int handle_pan1(char* buffer, int size) {
+int handle_pan1(char* buffer, int offset) {
 
-    unsigned char flags = buffer[0x8];
-    unsigned char bitfield = buffer[0x9];
-    unsigned char alpha_value = buffer[0xA];
-    unsigned char part_scaling = buffer[0xB];
+    unsigned char flags = buffer[ offset + 0x8];
+    unsigned char bitfield = buffer[offset + 0x9];
+    unsigned char alpha_value = buffer[offset + 0xA];
+    unsigned char part_scaling = buffer[offset + 0xB];
 
     string pane_name = "";
-    for(char i=0xC; buffer[i] != '\0'; i++) {
-        pane_name += buffer[i];
+    for(char i=0xC; buffer[offset + i] != '\0'; i++) {
+        pane_name += buffer[offset + i];
     }
 
     string user_data = "";
     for(char i = 0x24; i < 0x2C; i++) {
-        user_data += buffer[i];
+        user_data += buffer[offset + i];
     }
     
-    float x_position = le_cast_float(buffer, 0x2C);
-    float y_position = le_cast_float(buffer, 0x30);
-    float z_position = le_cast_float(buffer, 0x34);
-    float x_rotation = le_cast_float(buffer, 0x38);
-    float y_rotation = le_cast_float(buffer, 0x3C);
-    float z_rotation = le_cast_float(buffer, 0x40);
-    float x_scale = le_cast_float(buffer, 0x44);
-    float y_scale = le_cast_float(buffer, 0x48);
-    float pane_width = le_cast_float(buffer, 0x4C);
-    float pane_height = le_cast_float(buffer, 0x50);
+    float x_position = le_cast_float(buffer, offset + 0x2C);
+    float y_position = le_cast_float(buffer, offset + 0x30);
+    float z_position = le_cast_float(buffer, offset + 0x34);
+    float x_rotation = le_cast_float(buffer, offset + 0x38);
+    float y_rotation = le_cast_float(buffer, offset + 0x3C);
+    float z_rotation = le_cast_float(buffer, offset + 0x40);
+    float x_scale = le_cast_float(buffer, offset + 0x44);
+    float y_scale = le_cast_float(buffer, offset + 0x48);
+    float pane_width = le_cast_float(buffer, offset + 0x4C);
+    float pane_height = le_cast_float(buffer, offset + 0x50);
 
     cout << "\tFlags: " << +flags << endl;
     cout << "\tBitfield: " << hex << +bitfield << dec << endl;
@@ -98,33 +98,33 @@ int handle_pan1(char* buffer, int size) {
     return 0;
 }
 
-int handle_prt1(char* buffer, int size) {
+int handle_prt1(char* buffer, int offset) {
 
-    unsigned char flags = buffer[0x8];
-    unsigned char bitfield = buffer[0x9];
-    unsigned char alpha_value = buffer[0xA];
-    unsigned char part_scaling = buffer[0xB];
+    unsigned char flags = buffer[offset + 0x8];
+    unsigned char bitfield = buffer[offset + 0x9];
+    unsigned char alpha_value = buffer[offset + 0xA];
+    unsigned char part_scaling = buffer[offset + 0xB];
 
     string pane_name = "";
-    for(char i=0xC; buffer[i] != '\0'; i++) {
-        pane_name += buffer[i];
+    for(char i=0xC; buffer[offset + i] != '\0'; i++) {
+        pane_name += buffer[offset + i];
     }
 
     string user_data = "";
     for(char i = 0x24; i < 0x2C; i++) {
-        user_data += buffer[i];
+        user_data += buffer[offset + i];
     }
     
-    float x_position = le_cast_float(buffer, 0x2C);
-    float y_position = le_cast_float(buffer, 0x30);
-    float z_position = le_cast_float(buffer, 0x34);
-    float x_rotation = le_cast_float(buffer, 0x38);
-    float y_rotation = le_cast_float(buffer, 0x3C);
-    float z_rotation = le_cast_float(buffer, 0x40);
-    float x_scale = le_cast_float(buffer, 0x44);
-    float y_scale = le_cast_float(buffer, 0x48);
-    float pane_width = le_cast_float(buffer, 0x4C);
-    float pane_height = le_cast_float(buffer, 0x50);
+    float x_position = le_cast_float(buffer, offset + 0x2C);
+    float y_position = le_cast_float(buffer, offset + 0x30);
+    float z_position = le_cast_float(buffer, offset + 0x34);
+    float x_rotation = le_cast_float(buffer, offset + 0x38);
+    float y_rotation = le_cast_float(buffer, offset + 0x3C);
+    float z_rotation = le_cast_float(buffer, offset + 0x40);
+    float x_scale = le_cast_float(buffer, offset + 0x44);
+    float y_scale = le_cast_float(buffer, offset + 0x48);
+    float pane_width = le_cast_float(buffer, offset + 0x4C);
+    float pane_height = le_cast_float(buffer, offset + 0x50);
 
     cout << "\tFlags: " << +flags << endl;
     cout << "\tBitfield: " << hex << +bitfield << dec << endl;
@@ -147,16 +147,16 @@ int handle_prt1(char* buffer, int size) {
     return 0;
 }
 
-int handle_mat1(char* buffer, int size) {
+int handle_mat1(char* buffer, int offset) {
     // NOT WORKING AS INTENDED
 
-    unsigned int top_left_color = le_cast_int(buffer, 0x0);
-    unsigned int top_right_color = le_cast_int(buffer, 0x4);
-    unsigned int bottom_left_color = le_cast_int(buffer, 0x8);
-    unsigned int bottom_right_color = le_cast_int(buffer, 0xC);
+    unsigned int top_left_color = le_cast_int(buffer, offset + 0x0);
+    unsigned int top_right_color = le_cast_int(buffer, offset + 0x4);
+    unsigned int bottom_left_color = le_cast_int(buffer, offset + 0x8);
+    unsigned int bottom_right_color = le_cast_int(buffer, offset + 0xC);
 
-    short index = le_cast_short(buffer, 0x10);
-    short coord_sets_count = le_cast_short(buffer, 0x12);
+    short index = le_cast_short(buffer, offset + 0x10);
+    short coord_sets_count = le_cast_short(buffer, offset + 0x12);
 
     cout << "\tTop Left Color: 0x" << hex << setw(8)<< setfill('0') << top_left_color << dec << endl;
     cout << "\tTop Right Color: 0x" << hex << setw(8)<< setfill('0') << top_right_color << dec << endl;
@@ -169,15 +169,15 @@ int handle_mat1(char* buffer, int size) {
     return 0;
 }
 
-int handle_section(char* section, int size) {
+int handle_section(char* section, int offset) {
 
     // Get section identifier
-    int identifier = be_cast_int(section, 0x0);
+    int identifier = be_cast_int(section, offset);
 
     switch (identifier){
         case lyt1:
             cout << "lyt1 : Layout" << endl;
-            handle_lyt1(section, size);
+            handle_lyt1(section, offset);
             break;
         case cnt1:
             cout << "cnt1 : Control data" << endl;
@@ -193,7 +193,7 @@ int handle_section(char* section, int size) {
             break;
         case mat1:
             cout << "mat1 : Material" << endl;
-            handle_mat1(section, size);
+            handle_mat1(section, offset);
             break;
         case grp1:
             cout << "grp1 : Group info" << endl;
@@ -206,7 +206,7 @@ int handle_section(char* section, int size) {
             break;
         case pan1:
             cout << "pan1 : Pane info" << endl;
-            handle_pan1(section, size);
+            handle_pan1(section, offset);
             break;
         case pas1:
             cout << "pas1 : Pane start" << endl;
@@ -222,7 +222,7 @@ int handle_section(char* section, int size) {
             break;
         case prt1:
             cout << "prt1 : Parts pane" << endl;
-            handle_prt1(section, size);
+            handle_prt1(section, offset);
             break;
         case txt1:
             cout << "txt1 : Textbox pane" << endl;
@@ -234,16 +234,6 @@ int handle_section(char* section, int size) {
             cout << "unk1 : Unknown" << endl;
             return 1;
             break;
-    }
-
-    return 0;
-}
-
-int copy_section(char* src_buffer, int src_buffer_pos, char* dest_buffer, int dest_buffer_size) {
-
-    // Iterate through each item in src_buffer and assign value to dest_buffer
-    for(int i = 0; src_buffer_pos+i < (src_buffer_pos+dest_buffer_size); i++) {
-        dest_buffer[i] = src_buffer[src_buffer_pos+i];
     }
 
     return 0;
@@ -261,73 +251,45 @@ int read_bflyt(string file_path_in) {
     }
 
     // Get file size and allocate memory for contents
-    unsigned int bflyt_header_size = 0x14; 
     unsigned int bflyt_data_size =  input_stream.tellg();
-    bflyt_data_size -= bflyt_header_size;
-
-    // Allocate array in memory for file contents
     char *bflyt_data = new char[bflyt_data_size];
-    char *bflyt_header = new char[bflyt_header_size];
 
     // Go back to begining of file
     input_stream.seekg(0, ios::beg);
-
-    // Read contents of file header and contents into memory
-    input_stream.read(bflyt_header, bflyt_header_size);
     input_stream.read(bflyt_data, bflyt_data_size);
-
-    // Close file stream
     input_stream.close();
 
-    // Interpret header data
-    unsigned int bflyt_magic_number = be_cast_int(bflyt_header, 0x0);
+    unsigned int bflyt_header_offset = 0x0;
+    unsigned int bflyt_header_size = 0x14;
+    unsigned int bflyt_magic_number = be_cast_int(bflyt_data, bflyt_header_offset);
+    unsigned int bflyt_section_pos = bflyt_header_offset + bflyt_header_size;
 
     // Magic number check
     if(bflyt_magic_number != bflyt) {
         cerr << "[!] Error not a bflyt file! " << file_path_in << endl;
 
         delete[] bflyt_data;
-        delete[] bflyt_header;
-
         bflyt_data = nullptr;
-        bflyt_header = nullptr;
 
         return 1;
     }
 
-    // DO SOMETHING WITH THE DATA PUNK!
-    // cout << bflyt_data[0] << bflyt_data[1] << bflyt_data[2] << bflyt_data[3] << endl;
-
     cout << file_path_in << endl;
 
-    unsigned int bflyt_pos = 0;
-
     // Start iterating through sections
-    while(bflyt_pos < bflyt_data_size) {
-        unsigned int section_size = le_cast_int(bflyt_data, bflyt_pos + 0x4);
-        char *section = new char[section_size];
-    
-        // Get section from bflyt buffer into its own buffer and handle data
-        copy_section(bflyt_data, bflyt_pos, section, section_size);
-        handle_section(section, section_size);
+    while(bflyt_section_pos < bflyt_data_size) {
+
+        unsigned int section_size = le_cast_int(bflyt_data, bflyt_section_pos + 0x4);
+
+        handle_section(bflyt_data, bflyt_section_pos);
 
         // Increment by section size
-        bflyt_pos += section_size;
-
-        // Clean up variables
-        delete[] section;
-
-        // Prevent dangling pointer
-        section = nullptr;
+        bflyt_section_pos += section_size;
     }
 
     // Clean up variables
     delete[] bflyt_data;
-    delete[] bflyt_header;
-
-    // Prevent dangling pointer
     bflyt_data = nullptr;
-    bflyt_header = nullptr;
 
     cout << endl;
 
@@ -353,7 +315,6 @@ int main() {
     */
 
 	read_bflyt("systemDataUnpacked/Eula/blyt/Cursor3.bflyt");
-	read_bflyt("systemDataUnpacked/Eula/blyt/Waiticon.bflyt");
 
 	return 0;
 }
