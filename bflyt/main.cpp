@@ -3,7 +3,7 @@
 #include <iomanip>
 #include "../utils/utils.hpp"
 
-#define bflyt 1179408724
+#define BFLYT 1179408724
 #define lyt1 1819898929
 #define cnt1 1668183089
 #define usd1 1970496561
@@ -50,6 +50,55 @@ int handle_lyt1(char* buffer, int offset) {
 }
 
 int handle_pan1(char* buffer, int offset) {
+
+    unsigned char flags = buffer[ offset + 0x8];
+    unsigned char bitfield = buffer[offset + 0x9];
+    unsigned char alpha_value = buffer[offset + 0xA];
+    unsigned char part_scaling = buffer[offset + 0xB];
+
+    string pane_name = "";
+    for(char i=0xC; buffer[offset + i] != '\0'; i++) {
+        pane_name += buffer[offset + i];
+    }
+
+    string user_data = "";
+    for(char i = 0x24; i < 0x2C; i++) {
+        user_data += buffer[offset + i];
+    }
+    
+    float x_position = le_cast_float(buffer, offset + 0x2C);
+    float y_position = le_cast_float(buffer, offset + 0x30);
+    float z_position = le_cast_float(buffer, offset + 0x34);
+    float x_rotation = le_cast_float(buffer, offset + 0x38);
+    float y_rotation = le_cast_float(buffer, offset + 0x3C);
+    float z_rotation = le_cast_float(buffer, offset + 0x40);
+    float x_scale = le_cast_float(buffer, offset + 0x44);
+    float y_scale = le_cast_float(buffer, offset + 0x48);
+    float pane_width = le_cast_float(buffer, offset + 0x4C);
+    float pane_height = le_cast_float(buffer, offset + 0x50);
+
+    cout << "\tFlags: " << +flags << endl;
+    cout << "\tBitfield: " << hex << +bitfield << dec << endl;
+    cout << "\tAlpha value: " << hex << +alpha_value << dec << endl;
+    cout << "\tPart Scaling: " << hex << +part_scaling << dec << endl;
+    cout << "\tPane Name: " << pane_name << endl;
+    cout << "\tUser Data: " << hex << user_data << dec << endl;
+    cout << "\tX Position: " << x_position << endl;
+    cout << "\tY Position: " << y_position << endl;
+    cout << "\tZ Position: " << z_position << endl;
+    cout << "\tX Rotation: " << x_rotation << endl;
+    cout << "\tY Rotation: " << y_rotation << endl;
+    cout << "\tZ Rotation: " << z_rotation << endl;
+    cout << "\tX Scale: " << x_scale << endl;
+    cout << "\tY Scale: " << y_scale << endl;
+    cout << "\tPane Width: " << pane_width << endl;
+    cout << "\tPane Height: " << pane_height <<endl;
+    cout << endl;
+
+    return 0;
+}
+
+int handle_pic1(char* buffer, int offset) {
 
     unsigned char flags = buffer[ offset + 0x8];
     unsigned char bitfield = buffer[offset + 0x9];
@@ -149,6 +198,8 @@ int handle_prt1(char* buffer, int offset) {
 
 int handle_mat1(char* buffer, int offset) {
     // NOT WORKING AS INTENDED
+    // I DONT HAVE A PERFECT UNDERSTANDING ON HOW NIN**** DOES
+    // THE MATERIAL SECTION ILL GET AROUND TO RESEARCHING IT LATER
 
     unsigned int top_left_color = le_cast_int(buffer, offset + 0x0);
     unsigned int top_right_color = le_cast_int(buffer, offset + 0x4);
@@ -169,6 +220,12 @@ int handle_mat1(char* buffer, int offset) {
     return 0;
 }
 
+int handle_usd1(char* buffer, int offset) {
+
+
+    return 0;
+}
+
 int handle_section(char* section, int offset) {
 
     // Get section identifier
@@ -184,6 +241,7 @@ int handle_section(char* section, int offset) {
             break;
         case usd1:
             cout << "usd1 : User data" << endl;
+            handle_usd1(section, offset);
             break;
         case txl1:
             cout << "txl1 : Texture list" << endl;
@@ -219,6 +277,7 @@ int handle_section(char* section, int offset) {
             break;
         case pic1:
             cout << "pic1 : Picture pane" << endl;
+            handle_pic1(section, offset);
             break;
         case prt1:
             cout << "prt1 : Parts pane" << endl;
@@ -265,7 +324,7 @@ int read_bflyt(string file_path_in) {
     unsigned int bflyt_section_pos = bflyt_header_offset + bflyt_header_size;
 
     // Magic number check
-    if(bflyt_magic_number != bflyt) {
+    if(bflyt_magic_number != BFLYT) {
         cerr << "[!] Error not a bflyt file! " << file_path_in << endl;
 
         delete[] bflyt_data;
@@ -281,8 +340,8 @@ int read_bflyt(string file_path_in) {
 
         unsigned int section_size = le_cast_int(bflyt_data, bflyt_section_pos + 0x4);
 
+        cout << "section size : 0x"  << hex << section_size << dec << " : ";
         handle_section(bflyt_data, bflyt_section_pos);
-
         // Increment by section size
         bflyt_section_pos += section_size;
     }

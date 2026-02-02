@@ -47,7 +47,17 @@ Dictionary
 | :--- | :--- | :--- |
 | 0x0 | 4 | Magic number (_DIC) |
 | 0x4 | 4 | Number of entries |
-| 0x4 | 4 |  |
+
+# _DIC Entries
+
+| Offset | Size | Description |
+| :--- | :--- | :--- |
+| 0x0 | 4 | Reference Bit |
+| 0x4 | 2 | Left Node Index |
+| 0x6 | 2 | Right Node Index |
+| 0x8 | 8 | [_STR table entry](#_str-header) offset |
+
+https://epd.zeldamods.org/wiki/Common_nn::util#nn::util::ResDic
 
 # BRTI header
 
