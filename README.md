@@ -74,7 +74,7 @@ You can find a copy of the license in the [LICENSE file](LICENSE).
 
 ## Credits
 
-this repo is currently being developed and maintained by me but i'd like to give credit where credit is due as this couldn't be possible without the following sources:
+This repo is currently being developed and maintained by me but i'd like to give credit where credit is due as this couldn't be possible without the following sources:
 
 * __thakis__ for the [szs file format decompression documentation](http://www.amnoid.de/gc/yaz0.txt)
 * __kinnay__ for the [sarc and bflyt file format documentation](https://nintendo-formats.com/)
