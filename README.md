@@ -1,4 +1,4 @@
-# Nintendo-files
+# nintendo-files
 
 Just a simple program that im working one as a part of something bigger, can decompress szs files, unpack sarc files, and view bflyt files.
 
