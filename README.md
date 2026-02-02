@@ -66,8 +66,6 @@ cp [path-to-your-systemDataUnpacked-files] .
 make
 ```
 
-## Lorem Ipsum
-
 ## License
 
 This software is licensed under the terms of the GPLv3, with exemptions for specific projects noted below.
