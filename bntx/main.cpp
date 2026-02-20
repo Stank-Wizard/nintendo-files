@@ -1,6 +1,5 @@
 #include <iostream>
 #include <fstream>
-#include <iomanip>
 #include "../utils/utils.hpp"
 
 #define BNTX 1112429656
@@ -117,11 +116,11 @@ int print_dic_header(char* buffer, int offset) {
         }
 
         cout << "DIC : Entry number : " << dec << i << endl;
-        cout << "DIC : File name : " << file_name << endl;
         cout << "DIC : Reference Bit: 0x" << hex << reference_bit << endl;
         cout << "DIC : Left Node Index: 0x" << hex << left_node_index << endl;
         cout << "DIC : Right Node Index: 0x" << hex << right_node_index << endl;
         cout << "DIC : STR Entry offset : 0x" << hex << dic_str_entry_offset << endl;
+        cout << "DIC : File name : " << file_name << endl;
         cout << endl;
 
     }
@@ -129,19 +128,9 @@ int print_dic_header(char* buffer, int offset) {
     return 0;
 }
 
-int print_brti_pointers(char* buffer, int offset) {
-
-    for( int i = 0; i < 9; i++) {
-        unsigned int brti_header_offset = le_cast_int(buffer, offset + i*0x8);
-
-        cout << "BRTI : Header at 0x" << hex << brti_header_offset << endl;
-    }
-
-    return 0;
-}
-
 int print_brti_header(char* buffer, int offset) {
 
+    string file_name;
     int brti_next_section_offset = le_cast_int(buffer, offset + 0x4);
     long brti_header_size = le_cast_long(buffer, offset + 0x8);
     char brti_flags = buffer[offset + 0x10];
@@ -167,9 +156,13 @@ int print_brti_header(char* buffer, int offset) {
     int brti_alignment = le_cast_int(buffer, offset + 0x54);
     int brti_channel_type = le_cast_int(buffer, offset + 0x58);
     int brti_texture_type = le_cast_int(buffer, offset + 0x5C);
-    long brti_name_address = le_cast_long(buffer, offset + 0x64);
-    long brti_parent_address = le_cast_long(buffer, offset + 0x6C);
-    long brti_ptrs_address = le_cast_long(buffer, offset + 0x74);
+    long brti_name_address = le_cast_long(buffer, offset + 0x60);
+    long brti_parent_address = le_cast_long(buffer, offset + 0x68);
+    long brti_ptrs_address = le_cast_long(buffer, offset + 0x70);
+
+    for(int j = 2; buffer[brti_name_address + j] != '\0'; j++) {
+        file_name += buffer[brti_name_address + j];
+    }
 
     cout << "BRTI : Next section offset : " << brti_next_section_offset << endl;
     cout << "BRTI : Header size : " << brti_header_size << endl;
@@ -199,6 +192,7 @@ int print_brti_header(char* buffer, int offset) {
     cout << "BRTI : Name Address : 0x" << hex << +brti_name_address << endl;
     cout << "BRTI : Parent Address : 0x" << hex << +brti_parent_address << endl;
     cout << "BRTI : Ptrs Address : 0x" << hex << +brti_ptrs_address << endl;
+    cout << "DIC : File Name : " << file_name << endl;
     cout << endl;
 
     return 0;
@@ -231,6 +225,7 @@ int read_bntx(string file_path_in) {
     cout << file_path_in << endl;
 
     // --------------- BNTX HEADER -------------------
+
     unsigned int bntx_header_size = 0x20;
     unsigned int bntx_header_offset = 0x0;
     unsigned int bntx_magic_number = be_cast_int(bntx_data, bntx_header_offset);
@@ -250,6 +245,7 @@ int read_bntx(string file_path_in) {
     int rlt_header_offset = le_cast_int(bntx_data, bntx_header_offset + 0x18);
 
     // --------------- NX HEADER -------------------
+
     unsigned int nx_header_size = 0x20;
     unsigned int nx_header_offset = bntx_header_offset + bntx_header_size;
     unsigned int nx_magic_number = be_cast_int(bntx_data, nx_header_offset);
@@ -275,8 +271,9 @@ int read_bntx(string file_path_in) {
     long brtd_table_offset = le_cast_long(nx_header, nx_header_offset + 0x10);
     long dic_table_offset = le_cast_long(nx_header, nx_header_offset + 0x18);
     */
-    
+
     // --------------- _STR HEADER -------------------
+
     unsigned int str_header_size = 0x18;
     unsigned int str_table_offset = str_header_offset + str_header_size;
     unsigned int str_magic_number = be_cast_int(bntx_data, str_header_offset);
@@ -294,6 +291,7 @@ int read_bntx(string file_path_in) {
     print_str_header(bntx_data, str_header_offset);
 
     // --------------- _DIC HEADER -------------------
+
     unsigned int dic_header_size = 0x14;
     unsigned int dic_table_offset = dic_header_offset + dic_header_size;
     unsigned int dic_magic_number = be_cast_int(bntx_data, dic_header_offset);
@@ -309,8 +307,8 @@ int read_bntx(string file_path_in) {
 
     int dic_number_of_files = le_cast_int(bntx_data, dic_header_offset + 0x4);
 
-    print_dic_header(bntx_data, dic_header_offset);
-    
+    //print_dic_header(bntx_data, dic_header_offset);
+
     // --------------- BRTI HEADERS -------------------
 
     for(int i = 0; i < dic_number_of_files; i++) {
@@ -320,6 +318,7 @@ int read_bntx(string file_path_in) {
 
         cout << "BRTI : Pointer table offset : 0x" << hex <<  brti_pointer_offset << endl;
         cout << "BRTI : Header offset : 0x" << hex << brti_header_offset << endl;
+        cout << "------------------------------------" << endl;
 
         if(brti_magic_number != BRTI) {
             cerr << "[!] Error, Doesn't contain valid BRTI section! " << file_path_in << endl;
@@ -335,6 +334,9 @@ int read_bntx(string file_path_in) {
     }
 
     // --------------- BRTD HEADER -------------------
+
+    //print_brtd_header(bntx_data, brtd_header_offset);
+
     // --------------- _RLT HEADER -------------------
 
     delete[] bntx_data;

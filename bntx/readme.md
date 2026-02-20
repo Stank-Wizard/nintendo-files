@@ -57,8 +57,6 @@ Dictionary
 | 0x6 | 2 | Right Node Index |
 | 0x8 | 8 | [_STR table entry](#_str-header) offset |
 
-https://epd.zeldamods.org/wiki/Common_nn::util#nn::util::ResDic
-
 # BRTI header
 
 Texture info
@@ -66,7 +64,34 @@ Texture info
 | Offset | Size | Description |
 | :--- | :--- | :--- |
 | 0x0 | 4 | Magic number (BRTI) |
-| 0x0 | 4 |  |
+| 0x4 | 4 | Next Section Offest |
+| 0x8 | 8 | Header Size |
+| 0x10 | 1 | Flags |
+| 0x11 | 1 | Dimensions |
+| 0x12 | 2 | Tile Mode |
+| 0x14 | 2 | Swizzle Size |
+| 0x16 | 2 | Mip Map Count |
+| 0x18 | 2 | Multi Sample Count |
+| 0x1C | 2 | Reverse 1a |
+| 0x20 | 4 | Format |
+| 0x24 | 4 | Access Flags |
+| 0x28 | 4 | Width |
+| 0x2C | 4 | Height |
+| 0x30 | 4 | Array Count |
+| 0x34 | 4 | Block Height Log2 |
+| 0x38 | 4 | Reserved |
+| 0x3C | 4 | Reserved |
+| 0x40 | 4 | Reserved |
+| 0x44 | 4 | Reserved |
+| 0x48 | 4 | Reserved |
+| 0x4C | 4 | Reserved |
+| 0x50 | 4 | Data Length |
+| 0x54 | 4 | Alignment |
+| 0x58 | 4 | Channel Type |
+| 0x5C | 4 | Texture Type |
+| 0x60 | 8 | Name Address |
+| 0x68 | 8 | Parent Address |
+| 0x70 | 8 | Ptrs Address |
 
 # BRTD Header
 
@@ -84,4 +109,18 @@ Relocation Table
 | Offset | Size | Description |
 | :--- | :--- | :--- |
 | 0x0 | 4 | Magic number (_RLT) |
+| 0x4 | 4 | Offset of _RLT Table |
+| 0x8 | 4 | Number of Sections |
 | 0x0 | 4 |  |
+| 0x0 | 4 |  |
+| 0x0 | 4 |  |
+| 0x0 | 4 |  |
+
+# _RLT Entries
+
+| Offset | Size | Description |
+| :--- | :--- | :--- |
+| 0x0 | 4 | Entry Offset |
+| 0x0 | 4 | Array Count |
+| 0x0 | 4 | Offset Count |
+| 0x0 | 4 | Padding Size |
