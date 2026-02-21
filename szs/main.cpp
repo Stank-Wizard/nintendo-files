@@ -95,7 +95,7 @@ int decompress_szs(string file_path_in, string file_path_out) {
                 sarc_data_pos++;
             }
         }
-        
+
         // Move to next code byte and decrement the ammount of valid bits
         current_code_byte <<= 1;
         valid_bits_left -= 1;

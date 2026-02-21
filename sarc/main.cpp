@@ -57,7 +57,7 @@ int unpack_sarc(string file_path_in, string folder_path_out) {
         return 1;
     }
 
-    unsigned short number_of_files = le_cast_short(raw_data, sfat_header_offset + 0x6);
+    unsigned short number_of_files = le_cast_short(raw_data, 0x6 + sfat_header_offset);
     unsigned int sfat_entries_offset = sfat_header_offset + sfat_header_size;
     unsigned int sfat_entries_size = number_of_files * 0x10;
 
@@ -76,7 +76,7 @@ int unpack_sarc(string file_path_in, string folder_path_out) {
     }
 
     unsigned int sfnt_entries_offset = sfnt_header_offset + sfnt_header_size;
-    unsigned int sarc_entries_offset = le_cast_int(raw_data, sarc_header_offset + 0xC);
+    unsigned int sarc_entries_offset = le_cast_int(raw_data, 0xC + sarc_header_offset);
     unsigned int sfnt_entries_size = sfnt_entries_offset - sarc_entries_offset;
     unsigned int sarc_entries_size = raw_data_size - sarc_entries_offset;
 
@@ -84,12 +84,12 @@ int unpack_sarc(string file_path_in, string folder_path_out) {
     for(int sfat_pos = 0; sfat_pos < sfat_entries_size; sfat_pos += 0x10) {
 
         // Interpret data from each entry and setup the necessary variables
-        unsigned int file_name_position = le_cast_short(raw_data, sfat_entries_offset + sfat_pos + 0x4);
+        unsigned int file_name_position = le_cast_short(raw_data, 0x4 + sfat_entries_offset + sfat_pos);
         
         file_name_position *= 4;
 
-        unsigned int start_of_file = le_cast_int(raw_data, sfat_entries_offset + sfat_pos + 0x8);
-        unsigned int end_of_file = le_cast_int(raw_data, sfat_entries_offset + sfat_pos + 0xC);
+        unsigned int start_of_file = le_cast_int(raw_data, 0x8 + sfat_entries_offset + sfat_pos);
+        unsigned int end_of_file = le_cast_int(raw_data, 0xC + sfat_entries_offset + sfat_pos);
         unsigned int file_size = end_of_file - start_of_file;
 
         string file_name, folder_name;
@@ -138,7 +138,6 @@ int unpack_sarc(string file_path_in, string folder_path_out) {
         // Prevent dangling pointer
         file = nullptr;
     }
-
 
     // Clean up un needed variables and prevent dangling pointer
     delete[] raw_data;

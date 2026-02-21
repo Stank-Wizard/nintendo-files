@@ -28,14 +28,14 @@ int handle_lyt1(char* buffer, int offset) {
 
     bool is_drawn_from_middle = buffer[offset + 0x8];
 
-    float layout_width = le_cast_float(buffer, offset + 0xC);
-    float layout_height = le_cast_float(buffer, offset + 0x10);
-    float maximum_parts_width = le_cast_float(buffer, offset + 0x14);
-    float maximum_parts_height = le_cast_float(buffer, offset + 0x18);
+    float layout_width = le_cast_float(buffer, 0xC + offset);
+    float layout_height = le_cast_float(buffer, 0x10 + offset);
+    float maximum_parts_width = le_cast_float(buffer, 0x14 + offset);
+    float maximum_parts_height = le_cast_float(buffer, 0x18 + offset);
 
-    string layout_name = "";
-    for(char i=0x1C; buffer[offset + i] != '\0'; i++) {
-        layout_name += buffer[offset + i];
+    string layout_name;
+    for(char i=0x1C; buffer[i + offset] != '\0'; i++) {
+        layout_name += buffer[i + offset];
     }
 
     cout << "\tIs Drawn from middle: " << is_drawn_from_middle << endl;
@@ -51,31 +51,31 @@ int handle_lyt1(char* buffer, int offset) {
 
 int handle_pan1(char* buffer, int offset) {
 
-    unsigned char flags = buffer[ offset + 0x8];
-    unsigned char bitfield = buffer[offset + 0x9];
-    unsigned char alpha_value = buffer[offset + 0xA];
-    unsigned char part_scaling = buffer[offset + 0xB];
+    unsigned char flags = buffer[0x8 + offset];
+    unsigned char bitfield = buffer[0x9 + offset];
+    unsigned char alpha_value = buffer[0xA + offset];
+    unsigned char part_scaling = buffer[0xB + offset];
 
-    string pane_name = "";
-    for(char i=0xC; buffer[offset + i] != '\0'; i++) {
-        pane_name += buffer[offset + i];
+    string pane_name;
+    for(char i=0xC; buffer[i + offset] != '\0'; i++) {
+        pane_name += buffer[i + offset];
     }
 
-    string user_data = "";
+    string user_data;
     for(char i = 0x24; i < 0x2C; i++) {
-        user_data += buffer[offset + i];
+        user_data += buffer[i + offset];
     }
-    
-    float x_position = le_cast_float(buffer, offset + 0x2C);
-    float y_position = le_cast_float(buffer, offset + 0x30);
-    float z_position = le_cast_float(buffer, offset + 0x34);
-    float x_rotation = le_cast_float(buffer, offset + 0x38);
-    float y_rotation = le_cast_float(buffer, offset + 0x3C);
-    float z_rotation = le_cast_float(buffer, offset + 0x40);
-    float x_scale = le_cast_float(buffer, offset + 0x44);
-    float y_scale = le_cast_float(buffer, offset + 0x48);
-    float pane_width = le_cast_float(buffer, offset + 0x4C);
-    float pane_height = le_cast_float(buffer, offset + 0x50);
+
+    float x_position = le_cast_float(buffer, 0x2C + offset);
+    float y_position = le_cast_float(buffer, 0x30 + offset);
+    float z_position = le_cast_float(buffer, 0x34 + offset);
+    float x_rotation = le_cast_float(buffer, 0x38 + offset);
+    float y_rotation = le_cast_float(buffer, 0x3C + offset);
+    float z_rotation = le_cast_float(buffer, 0x40 + offset);
+    float x_scale = le_cast_float(buffer, 0x44 + offset);
+    float y_scale = le_cast_float(buffer, 0x48 + offset);
+    float pane_width = le_cast_float(buffer, 0x4C + offset);
+    float pane_height = le_cast_float(buffer, 0x50 + offset);
 
     cout << "\tFlags: " << +flags << endl;
     cout << "\tBitfield: " << hex << +bitfield << dec << endl;
@@ -100,31 +100,31 @@ int handle_pan1(char* buffer, int offset) {
 
 int handle_pic1(char* buffer, int offset) {
 
-    unsigned char flags = buffer[ offset + 0x8];
-    unsigned char bitfield = buffer[offset + 0x9];
-    unsigned char alpha_value = buffer[offset + 0xA];
-    unsigned char part_scaling = buffer[offset + 0xB];
+    unsigned char flags = buffer[0x8 + offset];
+    unsigned char bitfield = buffer[0x9 + offset];
+    unsigned char alpha_value = buffer[0xA + offset];
+    unsigned char part_scaling = buffer[0xB + offset];
 
-    string pane_name = "";
-    for(char i=0xC; buffer[offset + i] != '\0'; i++) {
-        pane_name += buffer[offset + i];
+    string pane_name;
+    for(char i=0xC; buffer[i + offset] != '\0'; i++) {
+        pane_name += buffer[i + offset];
     }
 
-    string user_data = "";
+    string user_data;
     for(char i = 0x24; i < 0x2C; i++) {
-        user_data += buffer[offset + i];
+        user_data += buffer[i + offset];
     }
-    
-    float x_position = le_cast_float(buffer, offset + 0x2C);
-    float y_position = le_cast_float(buffer, offset + 0x30);
-    float z_position = le_cast_float(buffer, offset + 0x34);
-    float x_rotation = le_cast_float(buffer, offset + 0x38);
-    float y_rotation = le_cast_float(buffer, offset + 0x3C);
-    float z_rotation = le_cast_float(buffer, offset + 0x40);
-    float x_scale = le_cast_float(buffer, offset + 0x44);
-    float y_scale = le_cast_float(buffer, offset + 0x48);
-    float pane_width = le_cast_float(buffer, offset + 0x4C);
-    float pane_height = le_cast_float(buffer, offset + 0x50);
+
+    float x_position = le_cast_float(buffer, 0x2C + offset);
+    float y_position = le_cast_float(buffer, 0x30 + offset);
+    float z_position = le_cast_float(buffer, 0x34 + offset);
+    float x_rotation = le_cast_float(buffer, 0x38 + offset);
+    float y_rotation = le_cast_float(buffer, 0x3C + offset);
+    float z_rotation = le_cast_float(buffer, 0x40 + offset);
+    float x_scale = le_cast_float(buffer, 0x44 + offset);
+    float y_scale = le_cast_float(buffer, 0x48 + offset);
+    float pane_width = le_cast_float(buffer, 0x4C + offset);
+    float pane_height = le_cast_float(buffer, 0x50 + offset);
 
     cout << "\tFlags: " << +flags << endl;
     cout << "\tBitfield: " << hex << +bitfield << dec << endl;
@@ -149,31 +149,31 @@ int handle_pic1(char* buffer, int offset) {
 
 int handle_prt1(char* buffer, int offset) {
 
-    unsigned char flags = buffer[offset + 0x8];
-    unsigned char bitfield = buffer[offset + 0x9];
-    unsigned char alpha_value = buffer[offset + 0xA];
-    unsigned char part_scaling = buffer[offset + 0xB];
+    unsigned char flags = buffer[0x8 + offset];
+    unsigned char bitfield = buffer[0x9 + offset];
+    unsigned char alpha_value = buffer[0xA + offset];
+    unsigned char part_scaling = buffer[0xB + offset];
 
-    string pane_name = "";
-    for(char i=0xC; buffer[offset + i] != '\0'; i++) {
-        pane_name += buffer[offset + i];
+    string pane_name;
+    for(char i=0xC; buffer[i + offset] != '\0'; i++) {
+        pane_name += buffer[i + offset];
     }
 
-    string user_data = "";
+    string user_data;
     for(char i = 0x24; i < 0x2C; i++) {
-        user_data += buffer[offset + i];
+        user_data += buffer[i + offset];
     }
     
-    float x_position = le_cast_float(buffer, offset + 0x2C);
-    float y_position = le_cast_float(buffer, offset + 0x30);
-    float z_position = le_cast_float(buffer, offset + 0x34);
-    float x_rotation = le_cast_float(buffer, offset + 0x38);
-    float y_rotation = le_cast_float(buffer, offset + 0x3C);
-    float z_rotation = le_cast_float(buffer, offset + 0x40);
-    float x_scale = le_cast_float(buffer, offset + 0x44);
-    float y_scale = le_cast_float(buffer, offset + 0x48);
-    float pane_width = le_cast_float(buffer, offset + 0x4C);
-    float pane_height = le_cast_float(buffer, offset + 0x50);
+    float x_position = le_cast_float(buffer, 0x2C + offset);
+    float y_position = le_cast_float(buffer, 0x30 + offset);
+    float z_position = le_cast_float(buffer, 0x34 + offset);
+    float x_rotation = le_cast_float(buffer, 0x38 + offset);
+    float y_rotation = le_cast_float(buffer, 0x3C + offset);
+    float z_rotation = le_cast_float(buffer, 0x40 + offset);
+    float x_scale = le_cast_float(buffer, 0x44 + offset);
+    float y_scale = le_cast_float(buffer, 0x48 + offset);
+    float pane_width = le_cast_float(buffer, 0x4C + offset);
+    float pane_height = le_cast_float(buffer, 0x50 + offset);
 
     cout << "\tFlags: " << +flags << endl;
     cout << "\tBitfield: " << hex << +bitfield << dec << endl;
@@ -201,13 +201,13 @@ int handle_mat1(char* buffer, int offset) {
     // I DONT HAVE A PERFECT UNDERSTANDING ON HOW NIN**** DOES
     // THE MATERIAL SECTION ILL GET AROUND TO RESEARCHING IT LATER
 
-    unsigned int top_left_color = le_cast_int(buffer, offset + 0x0);
-    unsigned int top_right_color = le_cast_int(buffer, offset + 0x4);
-    unsigned int bottom_left_color = le_cast_int(buffer, offset + 0x8);
-    unsigned int bottom_right_color = le_cast_int(buffer, offset + 0xC);
+    unsigned int top_left_color = le_cast_int(buffer, 0x0 + offset);
+    unsigned int top_right_color = le_cast_int(buffer, 0x4 + offset);
+    unsigned int bottom_left_color = le_cast_int(buffer, 0x8 + offset);
+    unsigned int bottom_right_color = le_cast_int(buffer, 0xC + offset);
 
-    short index = le_cast_short(buffer, offset + 0x10);
-    short coord_sets_count = le_cast_short(buffer, offset + 0x12);
+    short index = le_cast_short(buffer, 0x10 + offset);
+    short coord_sets_count = le_cast_short(buffer, 0x12 + offset);
 
     cout << "\tTop Left Color: 0x" << hex << setw(8)<< setfill('0') << top_left_color << dec << endl;
     cout << "\tTop Right Color: 0x" << hex << setw(8)<< setfill('0') << top_right_color << dec << endl;
@@ -342,6 +342,7 @@ int read_bflyt(string file_path_in) {
 
         cout << "section size : 0x"  << hex << section_size << dec << " : ";
         handle_section(bflyt_data, bflyt_section_pos);
+
         // Increment by section size
         bflyt_section_pos += section_size;
     }

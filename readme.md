@@ -12,7 +12,7 @@ git clone https://github.com/Stank-Wizard/nintendo-files.git
 cd nintendo-files/szs
 
 # copy needed files
-cp [path-to-your-systemData-files] .
+cp [path-to-your-systemData-files] . -r
 
 # finally run the program
 make
@@ -28,7 +28,7 @@ git clone https://github.com/Stank-Wizard/nintendo-files.git
 cd nintendo-files/sarc
 
 # copy needed files
-cp [path-to-your-systemDataDecompressed-files] .
+cp [path-to-your-systemDataDecompressed-files] . -r
 
 # finally run the program
 make
@@ -44,7 +44,7 @@ git clone https://github.com/Stank-Wizard/nintendo-files.git
 cd nintendo-files/bflyt
 
 # copy needed files
-cp [path-to-your-systemDataUnpacked-files] .
+cp [path-to-your-systemDataUnpacked-files] . -r
 
 # finally run the program
 make
@@ -60,7 +60,7 @@ git clone https://github.com/Stank-Wizard/nintendo-files.git
 cd nintendo-files/bntx
 
 # copy needed files
-cp [path-to-your-systemDataUnpacked-files] .
+cp [path-to-your-systemDataUnpacked-files] . -r
 
 # finally run the program
 make
