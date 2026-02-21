@@ -1,10 +1,11 @@
 #include <iostream>
 #include <fstream>
+#include <filesystem>
 #include "../utils/utils.hpp"
 
 #define BNTX 1112429656
 #define BRTI 1112691785
-#define BRTD 1111691780
+#define BRTD 1112691780
 #define STR 1599296594
 #define RLT 1599299012
 #define DIC 1598310723
@@ -32,6 +33,7 @@ int print_bntx_header(char* buffer, int offset) {
     cout << "BNTX : _STR Table offset : 0x" << hex << str_table_offset << endl;
     cout << "BNTX : _RLT Table offset : 0x" << hex << rlt_table_offset << endl;
     cout << "BNTX : File size : " << dec << file_size << endl;
+    cout << endl;
 
     return 0;    
 }
@@ -48,6 +50,7 @@ int print_nx_header(char* buffer, int offset) {
     cout << "NX : BRTI Address table offset: 0x" << hex << brti_address_table_offset << dec << endl;
     cout << "NX : BRTD Table offset: 0x" << hex << brtd_table_offset << dec << endl;
     cout << "NX : _DIC Table offset: 0x" << hex << dic_table_offset << dec << endl;
+    cout << endl;
 
     return 0;
 }
@@ -61,33 +64,7 @@ int print_str_header(char* buffer, int offset) {
 
     cout << "STR : Next section offset: 0x" << hex << str_next_section_offset << endl;
     cout << "STR : Number of files: " << dec << str_number_of_files << endl;
-
-    /* DAMN THIS IS A HORRIBLE WAY TO DO THIS
-    while(str_number_of_files != 0) {
-
-        string str_entry;
-
-        if(buffer[str_entries_offset] == '\0')
-            str_entries_offset += 1;
-
-        char size = buffer[str_entries_offset];
-        char i = 0;
-        str_entries_offset += 2;
-
-        while(i != size) {
-
-            str_entry += buffer[str_entries_offset + i];
-
-            i += 1;
-        }
-        
-        cout << "STR : " << str_entry << endl;
-
-        str_entries_offset += size;
-        str_entries_offset += 1;
-        str_number_of_files -= 1;
-    }
-    */
+    cout << endl;
 
     return 0;
 }
@@ -193,6 +170,8 @@ int print_brti_header(char* buffer, int offset) {
     cout << "BRTI : Parent Address : 0x" << hex << +brti_parent_address << endl;
     cout << "BRTI : Ptrs Address : 0x" << hex << +brti_ptrs_address << endl;
     cout << "DIC : File Name : " << file_name << endl;
+    //cout << "BRTD : Ptrs Address Start : 0x" << +brti_ptrs_address+0x1ff8 << endl; 
+    //cout << "BRTD : Ptrs Address End : 0x" << +brti_ptrs_address+brti_data_length+0x1ff8 << endl; 
     cout << endl;
 
     return 0;
@@ -202,7 +181,11 @@ int print_brtd_header(char* buffer, int offset) {
     return 0;
 }
 
-int read_bntx(string file_path_in) {
+int print_rlt_header(char* buffer, int offset) {
+    return 0;
+}
+
+int extract_bntx(string file_path_in, string folder_path_out) {
 
     // Create file stream for compressed data
     ifstream input_stream(file_path_in, ios::in | ios::ate | ios::binary);
@@ -222,8 +205,6 @@ int read_bntx(string file_path_in) {
     input_stream.read(bntx_data, bntx_data_size);
     input_stream.close();
 
-    cout << file_path_in << endl;
-
     // --------------- BNTX HEADER -------------------
 
     unsigned int bntx_header_size = 0x20;
@@ -239,7 +220,7 @@ int read_bntx(string file_path_in) {
         return 1;
     }
 
-    print_bntx_header(bntx_data, bntx_header_offset);
+    //print_bntx_header(bntx_data, bntx_header_offset);
 
     short str_header_offset = le_cast_short(bntx_data, bntx_header_offset + 0x16);
     int rlt_header_offset = le_cast_int(bntx_data, bntx_header_offset + 0x18);
@@ -260,17 +241,11 @@ int read_bntx(string file_path_in) {
 
     }
 
-    print_nx_header(bntx_data, nx_header_offset);
+    //print_nx_header(bntx_data, nx_header_offset);
 
     long brti_address_table_offset = le_cast_long(bntx_data, nx_header_offset + 0x8);
     long brtd_header_offset = le_cast_long(bntx_data, nx_header_offset + 0x10);
     long dic_header_offset = le_cast_long(bntx_data, nx_header_offset + 0x18);
-
-    /*
-    long brti_address_table_offset = le_cast_long(nx_header, nx_header_offset + 0x8);
-    long brtd_table_offset = le_cast_long(nx_header, nx_header_offset + 0x10);
-    long dic_table_offset = le_cast_long(nx_header, nx_header_offset + 0x18);
-    */
 
     // --------------- _STR HEADER -------------------
 
@@ -279,7 +254,7 @@ int read_bntx(string file_path_in) {
     unsigned int str_magic_number = be_cast_int(bntx_data, str_header_offset);
 
     if(str_magic_number != STR) {
-        cerr << "[!] Error, Doesn't contain valid _STR section! " << file_path_in << endl;
+        cerr << "[!] Error, Doesn't contain valid STR section! " << file_path_in << endl;
 
         delete[] bntx_data;
         bntx_data = nullptr;
@@ -287,8 +262,6 @@ int read_bntx(string file_path_in) {
         return 1;
 
     }
-
-    print_str_header(bntx_data, str_header_offset);
 
     // --------------- _DIC HEADER -------------------
 
@@ -307,18 +280,12 @@ int read_bntx(string file_path_in) {
 
     int dic_number_of_files = le_cast_int(bntx_data, dic_header_offset + 0x4);
 
-    //print_dic_header(bntx_data, dic_header_offset);
-
     // --------------- BRTI HEADERS -------------------
 
     for(int i = 0; i < dic_number_of_files; i++) {
         unsigned int brti_pointer_offset = brti_address_table_offset + i * 0x8;
         unsigned int brti_header_offset = le_cast_int(bntx_data, brti_pointer_offset);
         unsigned int brti_magic_number = be_cast_int(bntx_data, brti_header_offset);
-
-        cout << "BRTI : Pointer table offset : 0x" << hex <<  brti_pointer_offset << endl;
-        cout << "BRTI : Header offset : 0x" << hex << brti_header_offset << endl;
-        cout << "------------------------------------" << endl;
 
         if(brti_magic_number != BRTI) {
             cerr << "[!] Error, Doesn't contain valid BRTI section! " << file_path_in << endl;
@@ -329,15 +296,79 @@ int read_bntx(string file_path_in) {
             return 1;
         }
 
-        print_brti_header(bntx_data, brti_header_offset);
+        //print_brti_header(bntx_data, brti_header_offset);
 
     }
 
     // --------------- BRTD HEADER -------------------
 
-    //print_brtd_header(bntx_data, brtd_header_offset);
+    unsigned int brtd_magic_number = be_cast_int(bntx_data, brtd_header_offset);
+
+    if(brtd_magic_number != BRTD) {
+        cerr << "[!] Error, Doesn't contain valid BRTD section! " << file_path_in << endl;
+
+        delete[] bntx_data;
+        bntx_data = nullptr;
+
+        return 1;
+    }
 
     // --------------- _RLT HEADER -------------------
+
+    unsigned int rlt_magic_number = be_cast_int(bntx_data, rlt_header_offset);
+
+    if(brtd_magic_number != BRTD) {
+        cerr << "[!] Error, Doesn't contain valid RLT section! " << file_path_in << endl;
+
+        delete[] bntx_data;
+        bntx_data = nullptr;
+
+        return 1;
+    }
+
+    // ---------------- UNPACKING --------------------
+
+    for(int i = 0; i < dic_number_of_files; i++) {
+
+        string file_name, file_path_out;
+        unsigned int brti_pointer_offset = brti_address_table_offset + i * 0x8;
+        unsigned int brti_header_offset = le_cast_int(bntx_data, brti_pointer_offset);
+
+        unsigned int brti_data_length = le_cast_int(bntx_data, 0x50 + brti_header_offset);
+        unsigned long brti_name_address = le_cast_long(bntx_data, 0x60 + brti_header_offset);
+        unsigned long brti_ptrs_address = le_cast_long(bntx_data, 0x70 + brti_header_offset);
+        unsigned long brtd_file_data_offset = brti_ptrs_address + brtd_header_offset + 0x8;
+
+        for(int j = 2; bntx_data[brti_name_address + j] != '\0'; j++) {
+            file_name += bntx_data[brti_name_address + j];
+        }
+        
+        file_path_out = folder_path_out + file_name;
+
+        // Create file path for files
+        filesystem::path nested_path = folder_path_out;
+        filesystem::create_directories(nested_path);
+
+        // Create file stream for compressed data
+        ofstream output_stream(file_path_out, ios::out | ios::binary);
+
+        // If the file stream isnt open
+        if(!output_stream.is_open()) {
+            cerr << "[!] Error writing to file: " << file_path_out << endl;
+
+            delete[] bntx_data;
+            bntx_data = nullptr;
+
+            return 1;
+        }
+
+        // Write portion from brtd into its own file
+        output_stream.write(&bntx_data[brtd_file_data_offset], brti_data_length);
+        output_stream.close();
+
+        cout << file_path_in << " -> " << file_path_out << endl;
+
+    }
 
     delete[] bntx_data;
     bntx_data = nullptr;
@@ -347,24 +378,20 @@ int read_bntx(string file_path_in) {
 
 int main() {
 
-    /*
-    read_bntx("systemDataUnpacked/common/timg/__Combined.bntx");
-    read_bntx("systemDataUnpacked/Entrance/timg/__Combined.bntx");
-    read_bntx("systemDataUnpacked/Eula/timg/__Combined.bntx");
-    read_bntx("systemDataUnpacked/Flaunch/timg/__Combined.bntx");
-    read_bntx("systemDataUnpacked/Gift/timg/__Combined.bntx");
-    read_bntx("systemDataUnpacked/Interrupt/timg/__Combined.bntx");
-    read_bntx("systemDataUnpacked/Migration/timg/__Combined.bntx");
-    read_bntx("systemDataUnpacked/MyPage/timg/__Combined.bntx");
-    read_bntx("systemDataUnpacked/Notification/timg/__Combined.bntx");
-    read_bntx("systemDataUnpacked/Option/timg/__Combined.bntx");
-    read_bntx("systemDataUnpacked/Psl/timg/__Combined.bntx");
-    read_bntx("systemDataUnpacked/ResidentMenu/timg/__Combined.bntx");
-    read_bntx("systemDataUnpacked/SaveMove/timg/__Combined.bntx");
-    read_bntx("systemDataUnpacked/Set/timg/__Combined.bntx");
-    */
-
-    read_bntx("systemDataUnpacked/Eula/timg/__Combined.bntx");
+    extract_bntx("systemDataUnpacked/common/timg/__Combined.bntx", "systemDataExtracted/common/");
+    extract_bntx("systemDataUnpacked/Entrance/timg/__Combined.bntx", "systemDataExtracted/Entrance/");
+    extract_bntx("systemDataUnpacked/Eula/timg/__Combined.bntx", "systemDataExtracted/Eula/");
+    extract_bntx("systemDataUnpacked/Flaunch/timg/__Combined.bntx", "systemDataExtracted/Flaunch/");
+    extract_bntx("systemDataUnpacked/Gift/timg/__Combined.bntx", "systemDataExtracted/Gift/");
+    extract_bntx("systemDataUnpacked/Interrupt/timg/__Combined.bntx", "systemDataExtracted/Interrupt/");
+    extract_bntx("systemDataUnpacked/Migration/timg/__Combined.bntx", "systemDataExtracted/Migration/");
+    extract_bntx("systemDataUnpacked/MyPage/timg/__Combined.bntx", "systemDataExtracted/MyPage/");
+    extract_bntx("systemDataUnpacked/Notification/timg/__Combined.bntx", "systemDataExtracted/Notification/");
+    extract_bntx("systemDataUnpacked/Option/timg/__Combined.bntx", "systemDataExtracted/Option/");
+    extract_bntx("systemDataUnpacked/Psl/timg/__Combined.bntx", "systemDataExtracted/Psl/");
+    extract_bntx("systemDataUnpacked/ResidentMenu/timg/__Combined.bntx", "systemDataExtracted/ResidentMenu/");
+    extract_bntx("systemDataUnpacked/SaveMove/timg/__Combined.bntx", "systemDataExtracted/SaveMove/");
+    extract_bntx("systemDataUnpacked/Set/timg/__Combined.bntx", "systemDataExtracted/Set/");
 
     return 0;
 }

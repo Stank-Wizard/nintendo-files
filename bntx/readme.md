@@ -91,7 +91,7 @@ Texture info
 | 0x5C | 4 | Texture Type |
 | 0x60 | 8 | Name Address |
 | 0x68 | 8 | Parent Address |
-| 0x70 | 8 | Ptrs Address |
+| 0x70 | 8 | Ptrs Address (Relative to BRTD data offset)|
 
 # BRTD Header
 
