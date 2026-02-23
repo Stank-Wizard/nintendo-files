@@ -7,7 +7,7 @@
 #define BRTI 1112691785
 #define BRTD 1112691780
 #define STR 1599296594
-#define RLT 1599299012
+#define RLT 1599229012
 #define DIC 1598310723
 #define NX 1314398240
 
@@ -317,8 +317,10 @@ int extract_bntx(string file_path_in, string folder_path_out) {
 
     unsigned int rlt_magic_number = be_cast_int(bntx_data, rlt_header_offset);
 
-    if(brtd_magic_number != BRTD) {
+    if(rlt_magic_number != RLT) {
         cerr << "[!] Error, Doesn't contain valid RLT section! " << file_path_in << endl;
+
+        cerr << rlt_magic_number << endl;
 
         delete[] bntx_data;
         bntx_data = nullptr;
