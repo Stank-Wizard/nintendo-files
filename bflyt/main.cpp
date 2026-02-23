@@ -220,8 +220,38 @@ int handle_mat1(char* buffer, int offset) {
     return 0;
 }
 
-int handle_usd1(char* buffer, int offset) {
+int handle_txl1(char* buffer, int offset) {
 
+    int i = 0;
+    unsigned int magic_number = le_cast_int(buffer, offset);
+    unsigned int section_size = le_cast_int(buffer, 0x4 + offset);
+    unsigned int number_of_filenames = le_cast_int(buffer, 0x8 + offset);
+    unsigned int offset_to_filenames = le_cast_int(buffer, 0xC + offset);
+
+    cout << "\tMagic Number : " << magic_number << endl;
+    cout << "\tSection Size : " << section_size << endl;
+    cout << "\tNumber of File names : " << number_of_filenames << endl;
+    cout << "\tOffset to File names : " << offset_to_filenames << endl;
+
+    while(i < number_of_filenames) {
+
+        string filename;
+
+        for(int j = 0; buffer[j + offset_to_filenames + offset + 0xC] != '\0'; j++) {
+            filename += buffer[j + offset_to_filenames + offset + 0xC];
+        }
+
+        cout << "\tFilename : " << filename << endl;
+        offset_to_filenames += filename.length() + 1;
+        i++;
+    }
+
+    cout << endl;
+
+    return 0;
+}
+
+int handle_usd1(char* buffer, int offset) {
 
     return 0;
 }
@@ -245,6 +275,7 @@ int handle_section(char* section, int offset) {
             break;
         case txl1:
             cout << "txl1 : Texture list" << endl;
+            handle_txl1(section, offset);
             break;
         case fnl1:
             cout << "fnl1 : Font list" << endl;
