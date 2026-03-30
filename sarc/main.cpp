@@ -99,12 +99,17 @@ int unpack_sarc(string file_path_in, string folder_path_out) {
             file_name += raw_data[sfnt_entries_offset + sfnt_pos + file_name_position];
         }
 
-        // Bit of a hack to get folder paths
-        folder_name = file_name.substr(0, file_name.rfind('/'));
+        // Check if it is a folder or not, this is a fix for a bug
+        if(file_name.find('/') != string::npos) {
+         
+            // Bit of a hack to get folder paths
+            folder_name = file_name.substr(0, file_name.rfind('/'));
+    
+            // Create file path for files
+            filesystem::path nested_path = folder_path_out + folder_name + "/";
+            filesystem::create_directories(nested_path);
+        }
 
-        // Create file path for files
-        filesystem::path nested_path = folder_path_out + folder_name + "/";
-        filesystem::create_directories(nested_path);
 
         char *file = new char[file_size];
 
